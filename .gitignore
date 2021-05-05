@@ -1,0 +1,13 @@
+*.log
+*.pot
+*.pyc
+.DS_Store
+generator/__pycache__/
+EVM/__pycache__/
+local_settings.py
+db.sqlite3
+media
+migrations/
+#static root
+.static_root/
+.idea/

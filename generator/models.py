@@ -15,4 +15,5 @@ class problem(models.Model):
     blank_num = models.IntegerField()
     image = models.ImageField(null=True, blank=True)
     text = models.CharField(max_length=2000, blank=True, null=True)
+    blank_text = models.CharField(max_length=2000, blank=True, null=True)
 

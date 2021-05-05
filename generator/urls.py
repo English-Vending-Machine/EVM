@@ -1,7 +1,8 @@
+from django.conf.urls import include, url
+from generator import views
 from django.urls import path
 
-from . import views
-
 urlpatterns = [
-    path('', views.index, name='index'),
+    url(r'^upload/$', views.ImageCreateAPIView.as_view()),
+    path("<id>/", views.scan_img_from_DB),
 ]
