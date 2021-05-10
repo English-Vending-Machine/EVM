@@ -11,12 +11,12 @@ from rest_framework.decorators import api_view
 from generator.refine_text import *
 from django.shortcuts import render, get_object_or_404, redirect
 
-def home(request, email):
-    return HttpResponse("EVM MainPAGE")
-    #return render(request, 'main/home.html')
+def home(request):
+    return render(request, 'generator/Dashboard.html')
 
 def Upload_Photo(request):
-    return render(request, 'Upload_Photo.html')
+    #context = {'email':email}
+    return render(request, 'generator/Upload_Photo.html')
 
 def create(request):
     if(request.method == 'POST'):
@@ -28,7 +28,13 @@ def create(request):
         problem(type=_problem_type, image=_imgs, blank_num=_blank_num, answer=_answer).save()
         #return redirect('detail', pk=cam.IP)
     else:
-        return render(request, 'Upload_Photo.html')
+        return render(request, 'generator/Upload_Photo.html')
+
+def show_problem(request):
+    if (request.method == 'GET'):
+        _email = request.GET.get('email','')
+
+    return render(request, 'generator/Upload_Photo.html')
 
 # 사용자로부터 이미지 받으면 이를 DB에 저장.
 class ImageCreateAPIView(CreateAPIView):

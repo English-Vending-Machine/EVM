@@ -59,7 +59,7 @@ ROOT_URLCONF = 'EVM.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
+        'DIRS': [BASE_DIR / 'generator/../generator/templates']
         ,
         'APP_DIRS': True,
         'OPTIONS': {

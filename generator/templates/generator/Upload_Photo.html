@@ -5,7 +5,7 @@
     <title>Stationary Guards</title>
 </head>
 <body>
-<form method="POST" action="{% url 'create' %}" enctype="multipart/form-data">
+<form method="POST" action="{% url 'generator:create' %}" enctype="multipart/form-data">
     {% csrf_token %}
     <br><br>
     문제 유형
