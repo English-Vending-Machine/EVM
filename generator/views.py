@@ -11,22 +11,28 @@ from rest_framework.decorators import api_view
 from generator.refine_text import *
 from django.shortcuts import render, get_object_or_404, redirect
 
+from accounts.models import monitor
+
 def home(request):
     return render(request, 'generator/Dashboard.html')
 
 def Upload_Photo(request):
-    #context = {'email':email}
     return render(request, 'generator/Upload_Photo.html')
 
 def create(request):
     if(request.method == 'POST'):
         _problem_type = request.POST['problem_type']
-        _imgs = request.POST.get('imgs','')
+        #_imgs = request.POST.get('imgs','')
         _blank_num = int(request.POST['blank_num'])
         _answer = int(request.POST['answer'])
+        _email = request.session.get('user')
+        _user = monitor.objects.get(email=_email)
 
-        problem(type=_problem_type, image=_imgs, blank_num=_blank_num, answer=_answer).save()
-        #return redirect('detail', pk=cam.IP)
+        for img in request.FILES.getlist('imgs'):
+            _imgs = img
+
+        problem(ID=_user,type=_problem_type, image=_imgs, blank_num=_blank_num, answer=_answer).save()
+        return render(request, 'generator/Dashboard.html')
     else:
         return render(request, 'generator/Upload_Photo.html')
 

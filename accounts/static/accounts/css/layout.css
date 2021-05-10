@@ -1,23 +1,24 @@
 .navbar-brand {
-    padding-left: 30px;
+    padding-left: 200px;
 }
 
 .main_left{
-    padding-left: 30px;
+    padding-left: 200px;
     width: 1000px;
     float:left;
     /* 사실상 효과 없음 */
-    min-height: 700px;
+    min-height: 500px;
     background-image: url('../images/slogan.PNG');
     background-repeat: no-repeat;
-    background-size: 100% 100%;
+    background-size: 60% 60%;
 }
 
 .main_right{
     width: 100%;
     float:left;
+    top:100px;
     margin-right: -1000px;
-    padding-right: 1000px;
+    padding-right: 500px;
     min-height: 500px;
 }
 
