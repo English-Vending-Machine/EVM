@@ -10,13 +10,14 @@
     <br><br>
     문제 유형
     <select name="problem_type">
-        {% for t in target %}
-            <option value={{ t.type }} selected="selected"> "{{ t.type }}" </option>
-        {% endfor %}
-        </select>
+        <option value="order">순서</option>
+        <option value="blank">빈칸</option>
+        <option value="insert">삽입</option>
+        <option value="topic">주제/요지</option>
+    </select>
     <br><br>
     이미지 업로드
-    <input type="file" name="imgs" multiple>
+    <input type="file" name="imgs">
     <br><br>
     정답 번호
     <input type="text", name="answer">

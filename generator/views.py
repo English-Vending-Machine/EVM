@@ -9,19 +9,26 @@ from generator.models import *
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from generator.refine_text import *
+from django.shortcuts import render, get_object_or_404, redirect
 
-def home(request):
+def home(request, email):
     return HttpResponse("EVM MainPAGE")
     #return render(request, 'main/home.html')
 
 def Upload_Photo(request):
-    _temp = problem_type.objects.all()
-    context={'target' : _temp}
-    return render(request, 'Upload_Photo.html', context)
+    return render(request, 'Upload_Photo.html')
 
 def create(request):
     if(request.method == 'POST'):
-        _cam = request.POST['Camera']
+        _problem_type = request.POST['problem_type']
+        _imgs = request.POST.get('imgs','')
+        _blank_num = int(request.POST['blank_num'])
+        _answer = int(request.POST['answer'])
+
+        problem(type=_problem_type, image=_imgs, blank_num=_blank_num, answer=_answer).save()
+        #return redirect('detail', pk=cam.IP)
+    else:
+        return render(request, 'Upload_Photo.html')
 
 # 사용자로부터 이미지 받으면 이를 DB에 저장.
 class ImageCreateAPIView(CreateAPIView):

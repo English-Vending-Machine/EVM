@@ -1,0 +1,30 @@
+.navbar-brand {
+    padding-left: 30px;
+}
+
+.main_left{
+    padding-left: 30px;
+    width: 1000px;
+    float:left;
+    /* 사실상 효과 없음 */
+    min-height: 700px;
+    background-image: url('../images/slogan.PNG');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.main_right{
+    width: 100%;
+    float:left;
+    margin-right: -1000px;
+    padding-right: 1000px;
+    min-height: 500px;
+}
+
+.accounts-box-header{
+    margin-bottom: 20px;
+}
+
+.accounts-box-footer{
+    margin-top: 20px;
+}
