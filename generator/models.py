@@ -14,6 +14,7 @@ class problem(models.Model):
     type = models.ForeignKey(problem_type, on_delete=models.CASCADE)
     blank_num = models.IntegerField()
     image = models.ImageField(null=True, blank=True)
-    text = models.CharField(max_length=2000, blank=True, null=True)
-    blank_text = models.CharField(max_length=2000, blank=True, null=True)
+    text = models.TextField(blank=True, null=True)
+    blank_text = models.TextField(blank=True, null=True)
+
 

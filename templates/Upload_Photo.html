@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stationary Guards</title>
+</head>
+<body>
+<form method="POST" action="{% url 'create' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <br><br>
+    문제 유형
+    <select name="problem_type">
+        {% for t in target %}
+            <option value={{ t.type }} selected="selected"> "{{ t.type }}" </option>
+        {% endfor %}
+        </select>
+    <br><br>
+    이미지 업로드
+    <input type="file" name="imgs" multiple>
+    <br><br>
+    정답 번호
+    <input type="text", name="answer">
+    <br><br>
+    원하는 빈칸 수
+    <input type="text", name="blank_num">
+    <br><br>
+    <input type="submit" value="Upload">
+</form>
+</body>
+</html>

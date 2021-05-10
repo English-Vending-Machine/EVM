@@ -4,7 +4,8 @@ from rest_framework.serializers import (
       ModelSerializer,
 )
 
-from generator.models import problem
+from generator.models import *
+
 
 class imageSerializer(ModelSerializer):
    class Meta:
@@ -16,6 +17,7 @@ class imageSerializer(ModelSerializer):
          'image',
          'blank_num'
       ]
+
 
 class imgTotextSerializer(serializers.ModelSerializer):
     class Meta:

@@ -5,18 +5,29 @@ from PIL import Image
 import pytesseract
 from .serializers import imageSerializer, imgTotextSerializer
 from rest_framework.generics import (CreateAPIView)
-from generator.models import problem
+from generator.models import *
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from generator.refine_text import *
 
-def index(request):
-    return HttpResponse("EVM Project")
+def home(request):
+    return HttpResponse("EVM MainPAGE")
+    #return render(request, 'main/home.html')
+
+def Upload_Photo(request):
+    _temp = problem_type.objects.all()
+    context={'target' : _temp}
+    return render(request, 'Upload_Photo.html', context)
+
+def create(request):
+    if(request.method == 'POST'):
+        _cam = request.POST['Camera']
 
 # 사용자로부터 이미지 받으면 이를 DB에 저장.
 class ImageCreateAPIView(CreateAPIView):
-	serializer_class = imageSerializer
-	queryset = problem.objects.all()
+    serializer_class = imageSerializer
+    queryset = problem.objects.all()
+
 
 #DB에서 해당 problem_id 찾은 후, 해당 problem에서 지문 추출 후, 정제까지 완료. 정제된 지문 앱으로 전달.
 @api_view(['GET'])
