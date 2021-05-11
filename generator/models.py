@@ -7,7 +7,7 @@ class problem(models.Model):
     answer = models.IntegerField()
     type = models.CharField(max_length=20)
     blank_num = models.IntegerField()
-    image = models.ImageField(null=True, blank=True)
+    image = models.ImageField(upload_to='problems/',null=True, blank=True)
     text = models.TextField(blank=True, null=True)
     blank_text = models.TextField(blank=True, null=True)
 

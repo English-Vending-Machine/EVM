@@ -74,7 +74,7 @@ def scan_img_from_DB(id):
     temp_problem.text = refined_text
     temp_problem.save()
 
-    context ={'img' : img, 'text':refined_text}
+    context ={'problem':temp_problem}
     return context
 
 # 사용자로부터 최종 text 받아서 keyword 추출 후, blank 생성.
