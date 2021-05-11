@@ -1,0 +1,73 @@
+{% extends 'generator/layout.html' %}
+{% load static %}
+
+{% block extrahead %}
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}"/>
+{% endblock %}
+
+{% block content %}
+    <!-- header -->
+    <header class="header_admin" id="header">
+        <div class="top_header">
+            <h1 class="logo"><a href="#"><img src="{% static 'images/logo.png' %}" alt="EVM"></a></h1>
+        </div>
+        <nav>
+            <ul class="gnb">
+                <li>
+                    <a href="{% url 'generator:Upload_Photo' %}">문제 생성</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <!-- //header -->
+
+    <!-- main page part -->
+    <main id="container">
+        <section class="page_admin">
+            <div class="tit">
+                <div class="member_info_wrap">
+                    <button type="button" class="member_info">
+                       <strong>{{email}}</strong>
+                    </button>
+                    <ul class="list_member_menu">
+                        <li><a href="#">My Profile</a></li>
+                        <li><a href="#">Change Password</a></li>
+                        <li><a href="#">Sign Out</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                문제 사진
+                {{img}}
+                <br><br>
+                OCR 인식 지문<br>
+                * OCR 인식이 정확하지 않으니 틀린 부분은 수정하세요.<br>
+                <head>
+                    <meta charset="utf-8">
+                    <title>HTML</title>
+                    <style>
+                    * {
+                        font-size: 16px;
+                        font-family: Consolas, sans-serif;
+                    }
+                    textarea {
+                        width: 80%;
+                        height: 500px;
+                    }
+                    </style>
+                </head>
+                <body>
+                <form>
+                    <p><textarea>
+                        {{text}}
+                    </textarea></p>
+                    <br><br>
+                    <p><input type="submit" value="Submit"></p>
+                </form>
+                </body>
+            </div>
+        </section>
+    </main>
+
+
+{% endblock %}
