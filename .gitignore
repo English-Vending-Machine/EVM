@@ -11,4 +11,5 @@ migrations/
 #static root
 .static_root/
 .idea/
+#secretkey
 secret_key.json

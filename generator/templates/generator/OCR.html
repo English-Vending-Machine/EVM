@@ -9,7 +9,7 @@
     <!-- header -->
     <header class="header_admin" id="header">
         <div class="top_header">
-            <h1 class="logo"><a href="#"><img src="{% static 'images/logo.png' %}" alt="EVM"></a></h1>
+            <h1 class="logo"><a href="{% url 'generator:home' %}"><img src="{% static 'images/logo.png' %}" alt="EVM"></a></h1>
         </div>
         <nav>
             <ul class="gnb">
@@ -72,13 +72,13 @@
                     </style>
                 </head>
                 <body>
-                <form>
-                    <p><textarea spellcheck="true">
-                        {{problem.text}}
-                    </textarea></p>
-                    <br><br>
-                    <p><input type="submit" value="Submit"></p>
-                </form>
+                    <form>
+                        <p><textarea spellcheck="true">
+                            {{problem.text}}
+                        </textarea></p>
+                        <br><br>
+                        <p><input type="submit" value="Submit"></p>
+                    </form>
                 </body>
             </div>
         </section>

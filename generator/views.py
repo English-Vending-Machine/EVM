@@ -15,11 +15,17 @@ from accounts.models import monitor
 from .PK_From_DB import *
 
 def home(request):
-    return render(request, 'generator/Dashboard.html')
+    _email = request.session.get('user')
+    problem_num = problem.objects.filter(ID=_email).count()
+    context = {'email': _email, 'PN': problem_num}
+    return render(request, 'generator/Dashboard.html', context)
 
 #사진 업로드 하는 창 부름
 def Upload_Photo(request):
-    return render(request, 'generator/Upload_Photo.html')
+    _email = request.session.get('user')
+    problem_num = problem.objects.filter(ID=_email).count()
+    context = {'email': _email, 'PN': problem_num}
+    return render(request, 'generator/Upload_Photo.html', context)
 
 #업로드 된 문제에 관한 정보들을 갖고, problem DB에 저장. 그리고 scan_from_DB로 OCR 인식.
 def create(request):
@@ -67,7 +73,7 @@ def scan_img_from_DB(id):
     if(temp_problem.type=="order"):
         refined_text = type_order(one_text, temp_problem.answer)
     elif(temp_problem.type=="blank"):
-        refined_text = type_order(one_text, temp_problem.answer)
+        refined_text = type_blank(one_text, temp_problem.answer)
     elif (temp_problem.type == "insert"):
         refined_text = type_insert(one_text, temp_problem.answer)
 

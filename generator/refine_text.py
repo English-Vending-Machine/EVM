@@ -155,11 +155,14 @@ def type_insert(text, answer):
                         break
         i += 1
     # print(text)
+    # 공백과 개행 제거
+    text = text.strip().replace("\n", " ")
     return text
 
 # 빈칸 문제 지문 완벽화
 def type_blank(text, answer):
     perfect_text = []
+    # 삽입할 문장 시작점 찾기
     for i in range(len(text)):
         start_flag = True
         if text[i].encode().isalpha() == False:
@@ -173,25 +176,24 @@ def type_blank(text, answer):
                     continue
             if start_flag == True:
                 break
-    val = text[i:]
-    idx = val.find('\n\n')
 
-    temp_arr = val.split('\n')
+    text = text[i:]
+    idx = text.find('\n\n')
+    temp_arr = text.split('\n')
     temp_arr.reverse()
-    ans = list()
+    answer = list()
     ans_num = 0
     for temp in temp_arr:
         if len(temp) != 0 and temp[-1].isalpha():
             ans_num += 1
-            ans.append(temp)
+            answer.append(temp)
         if ans_num >= 5:
             break
-    '''print(ans)
-    print(val[:idx])
-    print(ans[-2])
-    print(val[idx + 2:])
-    print('*' * 100)
 
-    print("-******************************************************\n")'''
+    text = text.split('\n')
+    text = text[:-7]
+    text = " ".join(text)
+    #perfect_text = text[:idx] + ans[-2] + text[idx + 2:]
+    perfect_text = text[:idx] + text[idx + 2:]
 
     return perfect_text

@@ -7,6 +7,7 @@ app_name = 'generator'
 urlpatterns = [
     path('', views.home, name="home"),
     path('Upload_Photo', views.Upload_Photo, name='Upload_Photo'),
+    path('home', views.home, name='home'),
     path('create', views.create, name='create'),
     path('show_problem', views.show_problem, name='show_problem'),
     url(r'^upload/$', views.ImageCreateAPIView.as_view()),

@@ -1,31 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Image Upload</title>
-</head>
-<body>
-<form method="POST" action="{% url 'generator:create' %}" enctype="multipart/form-data">
-    {% csrf_token %}
-    <br><br>
-    문제 유형
-    <select name="problem_type">
-        <option value="order">순서</option>
-        <option value="blank">빈칸</option>
-        <option value="insert">삽입</option>
-        <option value="topic">주제/요지</option>
-    </select>
-    <br><br>
-    이미지 업로드
-    <input type="file" name="imgs">
-    <br><br>
-    정답 번호
-    <input type="text", name="answer">
-    <br><br>
-    원하는 빈칸 수
-    <input type="text", name="blank_num">
-    <br><br>
-    <input type="submit" value="Upload">
-</form>
-</body>
-</html>
+{% extends 'generator/layout.html' %}
+{% load static %}
+
+{% block extrahead %}
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}"/>
+{% endblock %}
+
+{% block content %}
+    <!-- header -->
+    <header class="header_admin" id="header">
+        <div class="top_header">
+            <h1 class="logo"><a href="{% url 'generator:home' %}"><img src="{% static 'images/logo.png' %}" alt="EVM"></a></h1>
+        </div>
+        <nav>
+            <ul class="gnb">
+                <li>
+                    <a href="{% url 'generator:Upload_Photo' %}">문제 생성</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <!-- //header -->
+    <style>
+        .left-box {
+            margin-left: 50px;
+            width: 100%;
+        }
+    </style>
+
+
+    <!-- main page part -->
+    <main id="container">
+        <section class="page_admin">
+            <div class="tit">
+                <div class="member_info_wrap">
+                    <button type="button" class="member_info">
+                       <strong>{{email}}</strong>
+                    </button>
+                    <ul class="list_member_menu">
+                        <li><a href="#">My Profile</a></li>
+                        <li><a href="#">Change Password</a></li>
+                        <li><a href="#">Sign Out</a></li>
+                    </ul>
+                </div>
+            </div>
+            <br><br><br>
+            <div class="left-box">
+                Image Upload <br>
+                <body>
+                <form method="POST" action="{% url 'generator:create' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <br><br>
+                    문제 유형
+                    <select name="problem_type">
+                        <option value="order">순서</option>
+                        <option value="blank">빈칸</option>
+                        <option value="insert">삽입</option>
+                        <option value="topic">주제/요지</option>
+                    </select>
+                    <br><br>
+                    이미지 업로드
+                    <input type="file" name="imgs">
+                    <br><br>
+                    정답 번호
+                    <input type="text", name="answer">
+                    <br><br>
+                    원하는 빈칸 수
+                    <input type="text", name="blank_num">
+                    <br><br>
+                    <input type="submit" value="Upload">
+                </form>
+                </body>
+            </div>
+        </section>
+    </main>
+{% endblock %}
