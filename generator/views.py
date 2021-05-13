@@ -43,16 +43,21 @@ def create(request):
         _problem = problem(problem_id = _problem_id,ID=_user,type=_problem_type, image=_imgs, blank_num=_blank_num, answer=_answer).save()
         context = scan_img_from_DB(_problem_id)
         context['email']=_email
+        context['id']=_problem_id
         return render(request, 'generator/OCR.html', context)
 
     else:
         return render(request, 'generator/Upload_Photo.html')
 
 def show_problem(request):
-    if (request.method == 'GET'):
-        _email = request.GET.get('email','')
+    print("여기")
+    _email = request.session.get('user')
+    context = {}
+    context['email'] = _email
+    _text = request.POST.get('text', '')
+    _problem_id = request.POST.get('problem','')
 
-    return render(request, 'generator/Upload_Photo.html')
+    return render(request, 'generator/Show_BlankText.html', context)
 
 # 사용자로부터 이미지 받으면 이를 DB에 저장.
 class ImageCreateAPIView(CreateAPIView):
@@ -63,7 +68,6 @@ class ImageCreateAPIView(CreateAPIView):
 #DB에서 해당 problem_id 찾은 후, 해당 problem에서 지문 추출 후, 정제까지 완료. 정제된 지문 앱으로 전달.
 def scan_img_from_DB(id):
     temp_problem = problem.objects.get(problem_id=id)
-    print(temp_problem)
     img = Image.open(temp_problem.image)
     one_text = pytesseract.image_to_string(img, lang='kor+eng')
 
@@ -80,7 +84,7 @@ def scan_img_from_DB(id):
     temp_problem.text = refined_text
     temp_problem.save()
 
-    context ={'problem':temp_problem}
+    context = {'problem':temp_problem}
     return context
 
 # 사용자로부터 최종 text 받아서 keyword 추출 후, blank 생성.
