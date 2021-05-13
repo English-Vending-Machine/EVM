@@ -160,9 +160,12 @@ def type_insert(text, answer):
     return text
 
 # 빈칸 문제 지문 완벽화
+# 빈칸 문제 지문 완벽화
 def type_blank(text, answer):
     perfect_text = []
+
     # 삽입할 문장 시작점 찾기
+    i = 0
     for i in range(len(text)):
         start_flag = True
         if text[i].encode().isalpha() == False:
@@ -177,23 +180,88 @@ def type_blank(text, answer):
             if start_flag == True:
                 break
 
+    # 앞에 한글 문제 제외하고 첫 시작부터 text에 넣기.
     text = text[i:]
-    idx = text.find('\n\n')
-    temp_arr = text.split('\n')
-    temp_arr.reverse()
-    answer = list()
-    ans_num = 0
-    for temp in temp_arr:
-        if len(temp) != 0 and temp[-1].isalpha():
-            ans_num += 1
-            answer.append(temp)
-        if ans_num >= 5:
-            break
 
-    text = text.split('\n')
-    text = text[:-7]
-    text = " ".join(text)
-    #perfect_text = text[:idx] + ans[-2] + text[idx + 2:]
-    perfect_text = text[:idx] + text[idx + 2:]
+    # 지문 끝 부분 찾기
+    end_idx = text.find('\n\n')
+    ans_text = text[end_idx:]
+    text = text[:end_idx]
+
+    # 빈칸 찾기.
+    blank_idx = text.find('   ')
+
+    f_text = ""
+    # 빈칸 앞 부분까지 perfect_text에 추가.
+    if blank_idx != -1:
+        f_text = text[:blank_idx]
+    else:
+        f_text = text
+
+    # 개행 지우기.
+    temp = f_text.split("\n")
+    front_text = ""
+    for i in temp:
+        front_text += i
+        front_text += " "
+
+    # 빈칸 끝 부분 찾기.
+    end_blank_idx = blank_idx
+    while end_blank_idx < len(text):
+        if (text[end_blank_idx] != ' '):
+            break
+        end_blank_idx += 1
+
+    # 문장 끝 찾기
+    # end_idx = text.find('\n\n')
+    b_text = text[end_blank_idx:]
+    temp = b_text.split("\n")
+
+    # 개행 지우기.
+    back_text = ""
+    for i in temp:
+        back_text += i
+        back_text += " "
+
+    # 정답 찾기.
+    cnt = 0
+    answer_list = []
+    ans = ""
+    b_flag = False
+
+    for c in ans_text:
+        if c.isalpha() == True:
+            if b_flag == True:
+                ans += ' '
+                b_flag = False
+            ans += c
+        elif c == ' ' and b_flag == False:
+            b_flag = True
+        elif c == ' ' and b_flag == True:
+            answer_list.append(ans)
+            ans = ""
+            b_flag = False
+        elif c == '\n':
+            answer_list.append(ans)
+            ans = ""
+            b_flag = False
+
+    true_answer_list = []
+    kor_flag = False
+    for a in answer_list:
+        if len(a) >= 2:
+            if a[1].isalpha() or a[0].isalpha():
+                i = 2
+                for i in range(len(a)):
+                    if (ord('가') <= ord(a[i]) <= ord('힣')):
+                        kor_flag = True
+                        break
+
+                if kor_flag == False:
+                    true_answer_list.append(a)
+                else:
+                    kor_flag = False
+
+    perfect_text = front_text + true_answer_list[answer - 1] + back_text
 
     return perfect_text
