@@ -48,19 +48,28 @@
             <br><br><br>
             <div class="left-box">
                 <body>
+                 <style>
+                    * {
+                        font-size: 16px;
+                        font-family: Consolas, sans-serif;
+                    }
+                    textarea {
+                        width: 48%;
+                        height: 500px;
+                    }
+                    </style>
                 <form method="POST" action="{% url 'generator:create' %}" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="left-box">
                         문제 사진 <br>
-                        <img src="{{ problem_image.url}}" alt = "ProblemImage" width="400">
+                        * 마우스 오른쪽 버튼으로 문제를 저장하세요.<br>
+                        <img src="{{ problem.problem_image.url}}" alt = "ProblemImage" width="640">
                         <br><br>
                     </div>
                     <p><textarea name="text" spellcheck="true">
                             {{problem.blank_text}}
                         </textarea></p>
                         <br><br>
-                        <form method="POST" action="{% url 'generator:show_problem' %}" enctype="multipart/form-data">
-                        <p><input type="submit" value="Submit"></p>
                 </form>
                 </body>
             </div>

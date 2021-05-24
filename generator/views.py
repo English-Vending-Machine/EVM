@@ -1,13 +1,8 @@
 from django.shortcuts import render
 
-from django.http import HttpResponse
 from PIL import Image
 import pytesseract
-from .serializers import imageSerializer, imgTotextSerializer
-from rest_framework.generics import (CreateAPIView)
 from generator.models import *
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
 from generator.refine_text import *
 from django.shortcuts import render, get_object_or_404, redirect
 
@@ -15,12 +10,7 @@ from accounts.models import monitor
 from .PK_From_DB import *
 from .make_blank import Create_Blank
 from .make_image import make_image
-from django.core.files.uploadedfile import InMemoryUploadedFile
-from django.core.files.base import ContentFile
 import EVM.settings
-from io import BytesIO, StringIO
-
-import base64
 
 def home(request):
     _email = request.session.get('user')
@@ -58,7 +48,6 @@ def create(request):
         request.session['problem_id'] = _problem_id
 
         return render(request, 'generator/OCR.html', context)
-
     else:
         return render(request, 'generator/Upload_Photo.html')
 
@@ -70,47 +59,21 @@ def show_problem(request):
     _text = request.POST.get('text', '')
     _problem_id = request.session.get('problem_id','')
 
+    _update_prob = problem.objects.get(problem_id=_problem_id)
+
+    _info = _update_prob.info
+
+    # 빈칸 생성.
     _problem_text = Create_Blank(_text)
 
-    _img = make_image(_problem_text, _problem_id)
-
-    # 빈칸 텍스트, 빈칸 텍스트 이미지화 한 것 DB에 저장.
-    _update_prob = problem.objects.get(problem_id=_problem_id)
+    _img = make_image(_problem_text, _info)
 
     _img_name = "\\results\\"+_problem_id+"_blank.png"
     _img_path = EVM.settings.MEDIA_ROOT + _img_name
 
-    print(_img_path)
     _img.save(_img_path)
 
-    print(_img)
-    print(type(_img))
-
-    img_io = StringIO()
-    original_image = Image.open(_img)
-    cropped_img = original_image.crop((0, 0, 165, 165))
-    cropped_img.save(img_io, format='JPEG', quality=100)
-    #img_content = ContentFile(img_io.getvalue(), image_name)
-    #print(file_content)
-    #print(type(file_content))
-
-    _update_prob.problem_image = _img
-
-    '''
-    # Save     to     disk     io     first
-    pic_io = BytesIO()
-    region.save(pic_io, _image.format)
-
-    pic_file = InMemoryUploadedFile(
-        file=pic_io,
-        field_name=None,
-        name=_img_path,
-        content_type='image/png',
-        size=_image.size,
-        charset=None
-    )
-    _update_prob.problem_image = pic_file'''
-
+    _update_prob.problem_image = _img_path
     _update_prob.text = _text
     _update_prob.blank_text = _problem_text
 
@@ -119,11 +82,6 @@ def show_problem(request):
     context['problem'] = _update_prob
 
     return render(request, 'generator/Show_BlankText.html', context)
-
-# 사용자로부터 이미지 받으면 이를 DB에 저장.
-class ImageCreateAPIView(CreateAPIView):
-    serializer_class = imageSerializer
-    queryset = problem.objects.all()
 
 
 #DB에서 해당 problem_id 찾은 후, 해당 problem에서 지문 추출 후, 정제까지 완료. 정제된 지문 앱으로 전달.
@@ -147,10 +105,6 @@ def scan_img_from_DB(id):
 
     context = {'problem':temp_problem}
     return context
-
-# 사용자로부터 최종 text 받아서 keyword 추출 후, blank 생성.
-def make_blank_in_text(request, id):
-    temp_problem = problem.objects.get(problem_id=id)
 
 # 사용자가 생성한 problem들 보여주기.
 def show_UserProblem(request):
