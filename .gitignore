@@ -6,7 +6,8 @@ generator/__pycache__/
 EVM/__pycache__/
 local_settings.py
 db.sqlite3
-media
+media/problems/
+media/results/
 generator/migrations
 accounts/migrations
 #static root
