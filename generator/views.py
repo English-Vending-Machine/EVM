@@ -80,37 +80,10 @@ def show_problem(request):
     _img_name = "\\results\\"+_problem_id+"_blank.png"
     _img_path = EVM.settings.MEDIA_ROOT + _img_name
 
-    print(_img_path)
+
     _img.save(_img_path)
 
-    print(_img)
-    print(type(_img))
-
-    img_io = StringIO()
-    original_image = Image.open(_img)
-    cropped_img = original_image.crop((0, 0, 165, 165))
-    cropped_img.save(img_io, format='JPEG', quality=100)
-    #img_content = ContentFile(img_io.getvalue(), image_name)
-    #print(file_content)
-    #print(type(file_content))
-
-    _update_prob.problem_image = _img
-
-    '''
-    # Save     to     disk     io     first
-    pic_io = BytesIO()
-    region.save(pic_io, _image.format)
-
-    pic_file = InMemoryUploadedFile(
-        file=pic_io,
-        field_name=None,
-        name=_img_path,
-        content_type='image/png',
-        size=_image.size,
-        charset=None
-    )
-    _update_prob.problem_image = pic_file'''
-
+    _update_prob.problem_image = _img_path
     _update_prob.text = _text
     _update_prob.blank_text = _problem_text
 

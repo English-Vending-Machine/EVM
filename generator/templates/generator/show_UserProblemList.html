@@ -32,7 +32,7 @@
 
     <!-- show problem popup -->
      <div style="display:none" class="popup_area" id='show_UserProblem{{ target.employee_id }}'>
-        <div class="con pop_con3">
+        <div class  ="con pop_con3">
             <h3 class="tit">문제</h3>
             <ul class="list_info">
                         <li>
@@ -42,7 +42,7 @@
                         <br><br>
                         <li>
                             <b>문제 사진</b>
-                            <span>{{ target.image.url }}</span>
+                            <<img src="{{ target.problem_image.url}}" alt = "ProblemImage" width="400">
                         </li>
             </ul>
             <button type="button" class="btn_close" >popup close button</button>
