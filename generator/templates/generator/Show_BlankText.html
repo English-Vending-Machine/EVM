@@ -15,6 +15,8 @@
             <ul class="gnb">
                 <li>
                     <a href="{% url 'generator:Upload_Photo' %}">문제 생성</a>
+                    <br><br>
+                    <a href="{% url 'generator:show_UserProblem' %}">생성한 문제 보기</a>
                 </li>
             </ul>
         </nav>
@@ -48,8 +50,13 @@
                 <body>
                 <form method="POST" action="{% url 'generator:create' %}" enctype="multipart/form-data">
                     {% csrf_token %}
+                    <div class="left-box">
+                        문제 사진 <br>
+                        <img src="{{ problem_image.url}}" alt = "ProblemImage" width="400">
+                        <br><br>
+                    </div>
                     <p><textarea name="text" spellcheck="true">
-                            {{problem.text}}
+                            {{problem.blank_text}}
                         </textarea></p>
                         <br><br>
                         <form method="POST" action="{% url 'generator:show_problem' %}" enctype="multipart/form-data">

@@ -11,3 +11,8 @@ for page in range(0, number_of_pages) :
     summarized_pages[page] = summarized_pages[page].replace("\\n","")
     print(str(page)+":"+summarized_pages[page])
 """
+
+def Create_Blank(text):
+    # 빈칸 생성
+
+    return text
