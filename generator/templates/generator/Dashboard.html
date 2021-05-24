@@ -15,6 +15,8 @@
             <ul class="gnb">
                 <li>
                     <a href="{% url 'generator:Upload_Photo' %}">문제 생성</a>
+                    <br><br>
+                    <a href="{% url 'generator:show_UserProblem' %}">생성한 문제 보기</a>
                 </li>
             </ul>
         </nav>
@@ -39,7 +41,7 @@
              <div class="dashboard">
                 <div class="card-deck d-flex">
                     <div class="card bg-light mb-3" style="max-width: 25rem;">
-                        <div class="card-header">Problems</div>
+                        <div class="card-header">생성한 문제 수 </div>
                         <div class="card-body">
                             <h5 class="card-title"></h5>
                             <p class="card-text">

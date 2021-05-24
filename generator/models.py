@@ -7,9 +7,11 @@ class problem(models.Model):
     answer = models.IntegerField()
     type = models.CharField(max_length=20)
     blank_num = models.IntegerField()
+    info = models.CharField(max_length=30, null=True)
     image = models.ImageField(upload_to='problems/',null=True, blank=True)
     text = models.TextField(blank=True, null=True)
     blank_text = models.TextField(blank=True, null=True)
+    problem_image = models.ImageField(upload_to='results/', null=True, blank=True)
 
 class class_cnt(models.Model):
     class_cnt_id = models.IntegerField(primary_key=True, default=1)
