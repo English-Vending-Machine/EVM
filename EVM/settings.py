@@ -19,7 +19,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONFIG_SECRET_FILE = os.path.join(BASE_DIR, 'secret_key.json')
 
 config_secret = json.loads(open(CONFIG_SECRET_FILE).read())
-
+#pytesseract.pytesseract.tesseract_cmd='C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 
 def get_secret(setting, secret=config_secret):
     try:
