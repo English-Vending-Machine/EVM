@@ -14,12 +14,10 @@
 }
 
 .main_right{
-    width: 100%;
-    float:left;
-    top:100px;
-    margin-right: -1000px;
-    padding-right: 500px;
-    min-height: 500px;
+
+    /* 0526 솔
+    지워버림!!
+    */
 }
 
 .accounts-box-header{
