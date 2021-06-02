@@ -20,6 +20,14 @@
                 </li>
             </ul>
         </nav>
+      <style>
+        body{background-image: url('https://i.ibb.co/N2btZq6/background.png');
+             background-repeat:no-repeat;
+            background-position:1%1% ;
+            background-attachment: fixed;
+            background-size:126%126%;
+        }
+      </style>
     </header>
     <!-- //header -->
 
@@ -29,13 +37,27 @@
             document.getElementById(tmp).style.display = "block";
         }
     </script>
+    <style>
+    tr{
+       height: 70px;
+        padding-left: 20px;
+    }
+    tr th:first-child{
+        padding-left: 20px;
+        font-size: 1.5em;
+    }
+    tr td:first-child{
+        padding-left: 20px;
+        font-size: 1.5em;
+    }
 
+    </style>
     <!-- show problem popup -->
      <div style="display:none" class="popup" id='show_UserProblem{{ target.employee_id }}'>
         <div class ="popuptext">
             <h3 class="tit">문제</h3>
             <ul class="list_info">
-                        <li>
+                        <li st>
                             <b>문제 정보</b>
                             <span>{{ target.info }}</span>
                         </li>
@@ -64,28 +86,23 @@
                     </ul>
                 </div>
             </div>
-            <br><br><br>
-            <thead>
-            <tr>
-                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                <th> <font style="font-size: 20px; font-weight: bold;">문제 정보</font></th>
-                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                <th> <font style="font-size: 20px; font-weight: bold;">문제 확인</font></th>
-            </tr>
-            <br><br><br>
-            </thead>
-            <tbody>
-            {% for candidate in candidates %}
+            <table>
+                <thead>
                 <tr>
-                    &nbsp; &nbsp; &nbsp;
-                    <td> {{ candidate.info }} </td>
-                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                    <td><input type="button" onclick='popup_problem("{{ candidate.problem_id }}")'
-                                               value="문제 보기" class="btn_type4"></td>
-                    <br><br>
+                    <th> <font style="font-size: 20px; font-weight: bold;">문제 정보</font></th>
+                    <th> <font style="font-size: 20px; font-weight: bold;">문제 확인</font></th>
                 </tr>
-            {% endfor %}
-            <tbody>
+                </thead>
+                <tbody>
+                {% for candidate in candidates %}
+                    <tr>
+                        <td> {{ candidate.info }} </td>
+                        <td><input type="button" onclick='popup_problem("{{ candidate.problem_id }}")'
+                                                   value="문제 보기" class="btn_type4"></td>
+                    </tr>
+                {% endfor %}
+                <tbody>
+            </table>
         </section>
     </main>
 {% endblock %}

@@ -27,7 +27,22 @@
             margin-left: 50px;
             width: 100%;
         }
+
+        .title_font{
+            font-family: 'Limelight', cursive;
+            font-size: 1.3em;
+        }
+
     </style>
+    <style>
+        body{background-image: url('https://i.ibb.co/N2btZq6/background.png');
+             background-repeat:no-repeat;
+            background-position:1%1% ;
+            background-attachment: fixed;
+            background-size:126%126%;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Limelight&display=swap" rel="stylesheet">
 
 
     <!-- main page part -->
@@ -60,13 +75,18 @@
                     </style>
                 <form method="POST" action="{% url 'generator:create' %}" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <div class="left-box">
+                    <div class="title_font"
+                    style=" font-weight:bold;
+
+                    font-style:oblique;
+                    ">
                         문제 사진 <br>
-                        * 마우스 오른쪽 버튼으로 문제를 저장하세요.<br>
-                        <img src="{{ problem.problem_image.url}}" alt = "ProblemImage" width="640">
+                        * 마우스 오른쪽 버튼으로 문제를 저장하세요.<br><!--원래는 640 && 600-->
+                        <img src="{{ problem.problem_image.url}}" alt = "ProblemImage" width="640" style="border:1px solid #b4b4b4">
                         <br><br>
                     </div>
-                    <p><textarea name="text" spellcheck="true">
+                    <p>
+                        <textarea name="text" spellcheck="true" style="position: absolute;left: 1100px;top: 185px;width: 600px;border: 1px solid #b4b4b4;height: 400px;">
                             {{problem.blank_text}}
                         </textarea></p>
                         <br><br>
