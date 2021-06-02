@@ -11,7 +11,7 @@ from .PK_From_DB import *
 from .make_blank import Create_Blank
 from .make_image import make_image
 import EVM.settings
-
+pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 def home(request):
     _email = request.session.get('user')
     problem_num = problem.objects.filter(ID=_email).count()
