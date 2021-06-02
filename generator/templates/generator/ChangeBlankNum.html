@@ -17,7 +17,7 @@
                     <a href="{% url 'generator:Upload_Photo' %}">문제 생성</a>
                     <br><br>
                     <a href="{% url 'generator:show_UserProblem' %}">생성한 문제 보기</a>
-                     <br><br>
+                    <br><br>
                     <a href="{% url 'generator:show_UserBlankNum' %}">빈칸 개수 수정</a>
                      <br><br>
                     <a href="{% url 'generator:show_DeveloperInfo' %}">개발자 정보</a>
@@ -94,16 +94,18 @@
             <table>
                 <thead>
                 <tr>
-                    <th> <font style="font-size: 20px; font-weight: bold;">문제 정보</font></th>
-                    <th> <font style="font-size: 20px; font-weight: bold;">문제 확인</font></th>
+                    <th> <font style="font-size: 20px; font-weight: bold;">문제 정보</font>
+                    <th> <font style="font-size: 20px; font-weight: bold;">빈칸 개수</font></th>
+                    <th> <font style="font-size: 20px; font-weight: bold;">빈칸 개수 수정</font></th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for candidate in candidates %}
                     <tr>
                         <td> {{ candidate.info }} </td>
+                        <td> {{ candidate.blank_num }} </td>
                         <td><input type="button" onclick='popup_problem("{{ candidate.problem_id }}")'
-                                                   value="문제 보기" class="btn_type4"></td>
+                                                   value="빈칸 개수 수정" class="btn_type4"></td>
                     </tr>
                 {% endfor %}
                 <tbody>
