@@ -10,6 +10,7 @@ from accounts.models import monitor
 from .PK_From_DB import *
 from .make_blank import Create_Blank
 from .make_image import make_image
+from googletrans import Translator
 import EVM.settings
 pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 def home(request):
@@ -77,6 +78,9 @@ def show_problem(request):
     _update_prob.text = _text
     _update_prob.blank_text = _problem_text
 
+    translator = Translator()
+    translated_text = translator.translate(_text, dest='ko', src='en').text
+    _update_prob.translation_text = translated_text
     _update_prob.save()
 
     context['problem'] = _update_prob
