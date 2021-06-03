@@ -10,6 +10,7 @@ from accounts.models import monitor
 from .PK_From_DB import *
 from .make_blank import Create_Blank
 from .make_image import make_image
+from googletrans import Translator
 import EVM.settings
 pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 def home(request):
@@ -77,6 +78,9 @@ def show_problem(request):
     _update_prob.text = _text
     _update_prob.blank_text = _problem_text
 
+    translator = Translator()
+    translated_text = translator.translate(_text, dest='ko', src='en').text
+    _update_prob.translation_text = translated_text
     _update_prob.save()
 
     context['problem'] = _update_prob
@@ -92,13 +96,15 @@ def scan_img_from_DB(id):
 
     refined_text = ""
 
-    #순서 유형 지문 정제
+    #유형에 따른 지문 정제
     if(temp_problem.type=="order"):
         refined_text = type_order(one_text, temp_problem.answer)
     elif(temp_problem.type=="blank"):
         refined_text = type_blank(one_text, temp_problem.answer)
     elif (temp_problem.type == "insert"):
         refined_text = type_insert(one_text, temp_problem.answer)
+    elif (temp_problem.type == "subject"):
+        refined_text = type_subject(one_text)
 
     temp_problem.text = refined_text
     temp_problem.save()
@@ -116,6 +122,36 @@ def show_UserProblem(request):
     context['candidates'] = candidates
 
     return render(request, 'generator/Show_UserProblemList.html', context)
+
+# 사용자가 생성한 problem들 보여주기.
+def show_UserProblem(request):
+    _email = request.session.get('user')
+    context = {}
+    context['email'] = _email
+
+    candidates = problem.objects.filter(ID=_email)
+    context['candidates'] = candidates
+
+    return render(request, 'generator/Show_UserProblemList.html', context)
+
+# 사용자가 생성한 problem과 빈칸 개수들 보여주기.
+def show_UserBlankNum(request):
+    _email = request.session.get('user')
+    context = {}
+    context['email'] = _email
+
+    candidates = problem.objects.filter(ID=_email)
+    context['candidates'] = candidates
+
+    return render(request, 'generator/ChangeBlankNum.html', context)
+
+# 개발자 정보
+def show_DeveloperInfo(request):
+    _email = request.session.get('user')
+    context = {}
+    context['email'] = _email
+
+    return render(request, 'generator/DeveloperInfo.html', context)
 
 
 

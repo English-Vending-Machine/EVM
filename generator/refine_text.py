@@ -265,3 +265,47 @@ def type_blank(text, answer):
     perfect_text = front_text + true_answer_list[answer - 1] + back_text
 
     return perfect_text
+
+
+## 요지, 주장, 주제 본문 추출
+## 그 외에도 본문만 필요한 경우 모두 사용 가능
+def type_subject(text):
+    tmp_text = text
+    for i in range(len(tmp_text)):
+        start_flag = True
+        if tmp_text[i].encode().isalpha() == False:
+            continue
+        else:
+            for j in range(1, 10):
+                if (ord('가') <= ord(tmp_text[j + i]) <= ord('힣')):
+                    start_flag = False
+                    break
+                else:
+                    continue
+            if start_flag == True:
+                break
+
+    # 앞에 한글 문제 제외하고 첫 시작부터 text에 넣기.
+    tmp_text = tmp_text[i:]
+
+    # 지문 끝 부분 찾기
+    end_idx = tmp_text.find('\n\n')
+
+    # end_idx후 버리는 부분이 발생하는 지 확인
+    if '+' in tmp_text[end_idx:]:
+        flag = True
+    else:
+        flag = False
+
+    # 확인해보니 주석의 경우 '+'로 표기가 되고 남는 부분이 발생하는 경우가 있음
+    # 그렇기에 + 앞의 부분을 살려서 결과 text에 붙이고 나서 strip 메서드를 통해서 빈공간 삭제
+    if flag:
+        need_text = tmp_text[end_idx:].split('+')[0]
+        res_text = tmp_text[:end_idx] + ' '.join(need_text.split('\n'))
+    else:
+        res_text = tmp_text[:end_idx]
+    res_text = res_text.strip()
+
+    res_text = res_text.replace('\n', ' ')
+
+    return res_text

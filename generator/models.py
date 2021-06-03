@@ -11,6 +11,7 @@ class problem(models.Model):
     image = models.ImageField(upload_to='problems/',null=True, blank=True)
     text = models.TextField(blank=True, null=True)
     blank_text = models.TextField(blank=True, null=True)
+    translation_text = models.TextField(blank=True, null=True)
     problem_image = models.ImageField(upload_to='results/', null=True, blank=True)
 
 class class_cnt(models.Model):
