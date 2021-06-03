@@ -14,10 +14,13 @@
             var popUrl="http://127.0.0.1:8000/generator/OneBlankNum/";
             popUrl += num;
             popUrl += "/"
-            var popOption="width=1200,height=600,resizable=yes,scrollbars=yes";
+            var popOption="width=500,height=600,resizable=yes,scrollbars=yes";
             var p = window.open(popUrl,"popup1",popOption);
+
             p.focus();
+            window.resizeTo(500,600);
         }
+
     </script>
 
     </head>
@@ -45,7 +48,9 @@
             background-position:1%1% ;
             background-attachment: fixed;
             background-size:126%126%;
+
         }
+
       </style>
     </header>
     <!-- //header -->
