@@ -69,10 +69,7 @@
             <div class="left-box">
                 <body>
                  <style>
-                    * {
-                        font-size: 16px;
-                        font-family: Consolas, sans-serif;
-                    }
+
                     textarea {
                         width: 48%;
                         height: 500px;
@@ -80,12 +77,8 @@
                     </style>
                 <form method="POST" action="{% url 'generator:create' %}" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <div class="title_font"
-                    style=" font-weight:bold;
-
-                    font-style:oblique;
-                    ">
-                        문제 사진 <br>
+                    <font size="5m" face="나눔고딕">
+                        [ 문제 사진 ]</font> <br>
                         * 마우스 오른쪽 버튼으로 문제를 저장하세요.<br><!--원래는 640 && 600-->
                         <img src="{{ problem.problem_image.url}}" alt = "ProblemImage" width="640" style="border:1px solid #b4b4b4">
                         <br><br>
