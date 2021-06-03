@@ -134,6 +134,17 @@ def show_UserProblem(request):
 
     return render(request, 'generator/Show_UserProblemList.html', context)
 
+# 사용자가 생성한 problem들 보여주기.
+def show_OneProblem(request, word):
+    _email = request.session.get('user')
+    context = {}
+    context['email'] = _email
+
+    candidates = problem.objects.get(problem_id=word)
+    context['candidates'] = candidates
+
+    return render(request, 'generator/OneProblem.html', context)
+
 # 사용자가 생성한 problem과 빈칸 개수들 보여주기.
 def show_UserBlankNum(request):
     _email = request.session.get('user')
