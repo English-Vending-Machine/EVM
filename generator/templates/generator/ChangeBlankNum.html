@@ -8,16 +8,21 @@
 {% block content %}
     <!-- header -->
     <head>
-     <script> <!-- 이 버튼은 빈칸 개수 수정용 -->
-        function problem_image_and_korean_translation(num){
-            var popUrl="http://127.0.0.1:8000/generator/OneProblem/";
+
+    <script> <!-- 이 버튼은 빈칸 개수 수정용 -->
+        function change_blank_num(num){
+            var popUrl="http://127.0.0.1:8000/generator/OneBlankNum/";
             popUrl += num;
             popUrl += "/"
-            var popOption="width=600,height=800,resizable=yes,scrollbars=yes";
+            var popOption="width=500,height=600,resizable=yes,scrollbars=yes";
             var p = window.open(popUrl,"popup1",popOption);
+
             p.focus();
+            window.resizeTo(500,600);
         }
+
     </script>
+
     </head>
     <header class="header_admin" id="header">
         <div class="top_header">
@@ -29,7 +34,7 @@
                     <a href="{% url 'generator:Upload_Photo' %}">문제 생성</a>
                     <br><br>
                     <a href="{% url 'generator:show_UserProblem' %}">생성한 문제 보기</a>
-                     <br><br>
+                    <br><br>
                     <a href="{% url 'generator:show_UserBlankNum' %}">빈칸 개수 수정</a>
                      <br><br>
                     <a href="{% url 'generator:show_DeveloperInfo' %}">개발자 정보</a>
@@ -43,12 +48,17 @@
             background-position:1%1% ;
             background-attachment: fixed;
             background-size:126%126%;
+
         }
+
       </style>
     </header>
     <!-- //header -->
 
-
+    <script>
+        function popup_problem(target) {
+        }
+    </script>
     <style>
     tr{
        height: 70px;
@@ -56,11 +66,15 @@
     }
     tr th:first-child{
         padding-left: 20px;
-        font-size: 1.5em;
+        font-size: 2em;
     }
     tr td:first-child{
         padding-left: 20px;
-        font-size: 1.5em;
+        font-size: 1.2em;
+    }
+    tr td:nth-child(2){
+        padding-left: 25px;
+        font-size: 1.2em;
     }
 
     </style>
@@ -101,16 +115,19 @@
             <table>
                 <thead>
                 <tr>
-                    <th> <font style="font-size: 20px; font-weight: bold;">문제 정보</font></th>
-                    <th> <font style="font-size: 20px; font-weight: bold;">문제 사진 및 한국어 번역 확인</font></th>
+                    <th> <font style="font-size: 20px; font-weight: bold;">문제 정보</font>
+                    <th> <font style="font-size: 20px; font-weight: bold;">　빈칸 개수</font></th>
+                    <th> <font style="font-size: 20px; font-weight: bold;">　빈칸 개수 수정</font></th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for candidate in candidates %}
                     <tr>
                         <td> {{ candidate.info }} </td>
-                        <td><input type="button" onclick='problem_image_and_korean_translation("{{ candidate.problem_id }}")'
-                                                   value="문제 보기" class="btn_type4"></td>
+                        <td>　 {{candidate.blank_num}} </td>
+                        <td><input type="button" onclick='change_blank_num("{{ candidate.problem_id }}")'
+                                                   value="빈칸 개수 수정" class="btn_type4"
+                        style="width:120pt"></td>
                     </tr>
                 {% endfor %}
                 <tbody>
