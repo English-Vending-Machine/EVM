@@ -11,8 +11,9 @@
 
     <script> <!-- 이 버튼은 빈칸 개수 수정용 -->
         function change_blank_num(num){
-            <!--alert('버튼 클릭 시부레!!!!!!!!');-->
-            var popUrl="https://www.google.com/search?q=%EC%84%9C%ED%98%84&tbm=isch&ved=2ahUKEwiV8dbdlfvwAhWLwIsBHcsNCUoQ2-cCegQIABAA&oq=%EC%84%9C%ED%98%84&gs_lcp=CgNpbWcQAzIECCMQJzIECCMQJzICCAAyAggAMgIIADICCAAyAggAMgUIABCxAzIFCAAQsQMyBQgAELEDOgQIABADOgcIIxDqAhAnUOIcWPgpYN8qaAJwAHgBgAGPAYgB8ASSAQMwLjWYAQCgAQGqAQtnd3Mtd2l6LWltZ7ABCsABAQ&sclient=img&ei=baO4YNWGH4uBr7wPy5uk0AQ&bih=828&biw=1100#imgrc=6XeboPmTgq4I6M";
+            var popUrl="http://127.0.0.1:8000/generator/OneBlankNum/";
+            popUrl += num;
+            popUrl += "/"
             var popOption="width=1200,height=600,resizable=yes,scrollbars=yes";
             var p = window.open(popUrl,"popup1",popOption);
             p.focus();

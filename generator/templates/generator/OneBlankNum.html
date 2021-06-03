@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>문제</title>
+    <form method="POST" action="{% url 'generator:ChangeBlankNum' candidates.problem_id %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <br><br>
+        <b>기존 문제 사진</b>
+        <<img src="{{ candidates.problem_image.url}}" alt = "ProblemImage" width="400">
+        <br><br>
+        <b>기존 빈칸 개수</b>
+        <span>{{ candidates.blank_num }}</span>
+        <br><br>
+        <b>바꿀 빈칸 개수</b>
+        <input type="text" class="input_st" name="blank_num">
+        <br><br>
+        <input type="submit" value="Update" class="blue_btn" style="margin-left: 105px">
+    </form>
+</head>
+<body>
+
+</body>
+</html>

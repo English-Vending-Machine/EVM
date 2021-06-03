@@ -65,7 +65,7 @@ def show_problem(request):
     _info = _update_prob.info
 
     # 빈칸 생성.
-    _problem_text = Create_Blank(_text)
+    _problem_text = Create_Blank(_text, _update_prob.blank_num)
 
     _img = make_image(_problem_text, _info)
 
@@ -123,18 +123,8 @@ def show_UserProblem(request):
 
     return render(request, 'generator/Show_UserProblemList.html', context)
 
-# 사용자가 생성한 problem들 보여주기.
-def show_UserProblem(request):
-    _email = request.session.get('user')
-    context = {}
-    context['email'] = _email
 
-    candidates = problem.objects.filter(ID=_email)
-    context['candidates'] = candidates
-
-    return render(request, 'generator/Show_UserProblemList.html', context)
-
-# 사용자가 생성한 problem들 보여주기.
+# 사용자가 생성한 problem 1개 보여주기.
 def show_OneProblem(request, word):
     _email = request.session.get('user')
     context = {}
@@ -144,6 +134,17 @@ def show_OneProblem(request, word):
     context['candidates'] = candidates
 
     return render(request, 'generator/OneProblem.html', context)
+
+# 사용자가 바꾸려는 problem 1개 보여주기.
+def show_OneBlankNum(request, word):
+    _email = request.session.get('user')
+    context = {}
+    context['email'] = _email
+
+    candidates = problem.objects.get(problem_id=word)
+    context['candidates'] = candidates
+
+    return render(request, 'generator/OneBlankNum.html', context)
 
 # 사용자가 생성한 problem과 빈칸 개수들 보여주기.
 def show_UserBlankNum(request):
@@ -155,6 +156,42 @@ def show_UserBlankNum(request):
     context['candidates'] = candidates
 
     return render(request, 'generator/ChangeBlankNum.html', context)
+
+def change_BlankNum(request,word):
+    _email = request.session.get('user')
+    context = {}
+    context['email'] = _email
+
+    _update_prob = problem.objects.get(problem_id=word)
+    _problem_id = _update_prob.problem_id
+
+    _blankNum = request.POST.get('blank_num','')
+    print(_update_prob)
+    print(_blankNum)
+    _update_prob.blank_num = int(_blankNum)
+
+    _text = _update_prob.text
+    _info = _update_prob.info
+
+    # 빈칸 생성.
+    _problem_text = Create_Blank(_text, _blankNum)
+
+    _img = make_image(_problem_text, _info)
+
+    _img_name = "\\results\\"+_problem_id+"_blank.png"
+    _img_path = EVM.settings.MEDIA_ROOT + _img_name
+
+    _img.save(_img_path)
+
+    _update_prob.problem_image = _img_path
+    _update_prob.text = _text
+    _update_prob.blank_text = _problem_text
+
+    _update_prob.save()
+
+    context['candidates'] = _update_prob
+
+    return render(request, 'generator/OneProblem.html', context)
 
 # 개발자 정보
 def show_DeveloperInfo(request):

@@ -159,118 +159,14 @@ def type_insert(text, answer):
     text = text.strip().replace("\n", " ")
     return text
 
-# 빈칸 문제 지문 완벽화
+
 # 빈칸 문제 지문 완벽화
 def type_blank(text, answer):
-    perfect_text = []
+    tmp_text = text
+    perfect_text = ''
 
     # 삽입할 문장 시작점 찾기
     i = 0
-    for i in range(len(text)):
-        start_flag = True
-        if text[i].encode().isalpha() == False:
-            continue
-        else:
-            for j in range(1, 10):
-                if (ord('가') <= ord(text[j + i]) <= ord('힣')):
-                    start_flag = False
-                    break
-                else:
-                    continue
-            if start_flag == True:
-                break
-
-    # 앞에 한글 문제 제외하고 첫 시작부터 text에 넣기.
-    text = text[i:]
-
-    # 지문 끝 부분 찾기
-    end_idx = text.find('\n\n')
-    ans_text = text[end_idx:]
-    text = text[:end_idx]
-
-    # 빈칸 찾기.
-    blank_idx = text.find('   ')
-
-    f_text = ""
-    # 빈칸 앞 부분까지 perfect_text에 추가.
-    if blank_idx != -1:
-        f_text = text[:blank_idx]
-    else:
-        f_text = text
-
-    # 개행 지우기.
-    temp = f_text.split("\n")
-    front_text = ""
-    for i in temp:
-        front_text += i
-        front_text += " "
-
-    # 빈칸 끝 부분 찾기.
-    end_blank_idx = blank_idx
-    while end_blank_idx < len(text):
-        if (text[end_blank_idx] != ' '):
-            break
-        end_blank_idx += 1
-
-    # 문장 끝 찾기
-    # end_idx = text.find('\n\n')
-    b_text = text[end_blank_idx:]
-    temp = b_text.split("\n")
-
-    # 개행 지우기.
-    back_text = ""
-    for i in temp:
-        back_text += i
-        back_text += " "
-
-    # 정답 찾기.
-    cnt = 0
-    answer_list = []
-    ans = ""
-    b_flag = False
-
-    for c in ans_text:
-        if c.isalpha() == True:
-            if b_flag == True:
-                ans += ' '
-                b_flag = False
-            ans += c
-        elif c == ' ' and b_flag == False:
-            b_flag = True
-        elif c == ' ' and b_flag == True:
-            answer_list.append(ans)
-            ans = ""
-            b_flag = False
-        elif c == '\n':
-            answer_list.append(ans)
-            ans = ""
-            b_flag = False
-
-    true_answer_list = []
-    kor_flag = False
-    for a in answer_list:
-        if len(a) >= 2:
-            if a[1].isalpha() or a[0].isalpha():
-                i = 2
-                for i in range(len(a)):
-                    if (ord('가') <= ord(a[i]) <= ord('힣')):
-                        kor_flag = True
-                        break
-
-                if kor_flag == False:
-                    true_answer_list.append(a)
-                else:
-                    kor_flag = False
-
-    perfect_text = front_text + true_answer_list[answer - 1] + back_text
-
-    return perfect_text
-
-
-## 요지, 주장, 주제 본문 추출
-## 그 외에도 본문만 필요한 경우 모두 사용 가능
-def type_subject(text):
-    tmp_text = text
     for i in range(len(tmp_text)):
         start_flag = True
         if tmp_text[i].encode().isalpha() == False:
@@ -287,25 +183,79 @@ def type_subject(text):
 
     # 앞에 한글 문제 제외하고 첫 시작부터 text에 넣기.
     tmp_text = tmp_text[i:]
+    tmp_text = tmp_text.strip()
+    tmp_text = tmp_text.replace('  ','*')
+    tmp_text = tmp_text.replace('\n\n','*')
+
+    tmp_list = tmp_text.split('*')
+
+    ## 빈간 전
+    first_text = tmp_list[0]
+    tmp_list.pop(0)
+    tmp_list = list(filter(('').__ne__, tmp_list))
+
+    ## 빈칸 후
+    end_text = tmp_list[0]
+    tmp_list.pop(0)
+    tmp_list = '\n'.join(tmp_list)
+
+    ## 정답 리스트
+    answer_list = tmp_list.split('\n')[-5:]
+    answer_text = answer_list[answer - 1]
+
+    perfect_text = first_text+ ' ' + answer_text+ ' '+ end_text
+    perfect_text = perfect_text.split('\n')
+    perfect_text = ' '.join(perfect_text)
+
+    return perfect_text
+
+
+## 요지, 주장, 주제 본문 추출
+## 그 외에도 본문만 필요한 경우 모두 사용 가능
+def type_subject(text):
+    tmp_text = text
+    for i in range(len(tmp_text)):
+        start_flag = True
+        if tmp_text[i].encode().isalpha() == False:
+            continue
+        else:
+            for j in range(1, 30):
+                if (ord('가') <= ord(tmp_text[j + i]) <= ord('힣')):
+                    start_flag = False
+                    break
+                else:
+                    continue
+            if start_flag == True:
+                break
+
+    # 앞에 한글 문제 제외하고 첫 시작부터 text에 넣기.
+    tmp_text = tmp_text[i:]
 
     # 지문 끝 부분 찾기
     end_idx = tmp_text.find('\n\n')
 
+    flag = 0
     # end_idx후 버리는 부분이 발생하는 지 확인
-    if '+' in tmp_text[end_idx:]:
-        flag = True
-    else:
-        flag = False
+    if '+' in tmp_text[end_idx:] :
+        flag = 1
+    elif '*' in tmp_text[end_idx:] :
+        flag = 2
+    else :
+        flag = 0
 
     # 확인해보니 주석의 경우 '+'로 표기가 되고 남는 부분이 발생하는 경우가 있음
     # 그렇기에 + 앞의 부분을 살려서 결과 text에 붙이고 나서 strip 메서드를 통해서 빈공간 삭제
-    if flag:
+    if flag == 1 :
         need_text = tmp_text[end_idx:].split('+')[0]
         res_text = tmp_text[:end_idx] + ' '.join(need_text.split('\n'))
-    else:
+    elif flag == 2:
+        need_text = tmp_text[end_idx:].split('*')[0]
+        res_text = tmp_text[:end_idx] + ' '.join(need_text.split('\n'))
+    else :
         res_text = tmp_text[:end_idx]
     res_text = res_text.strip()
-
-    res_text = res_text.replace('\n', ' ')
+    tmp_list = res_text.split('*')
+    res_text = tmp_list[0]
+    res_text = res_text.replace('\n',' ')
 
     return res_text

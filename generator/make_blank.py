@@ -12,7 +12,7 @@ for page in range(0, number_of_pages) :
     print(str(page)+":"+summarized_pages[page])
 """
 
-def Create_Blank(text):
+def Create_Blank(text, blankNum):
     # 빈칸 생성
 
     return text
