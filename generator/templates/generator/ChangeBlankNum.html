@@ -7,6 +7,19 @@
 
 {% block content %}
     <!-- header -->
+    <head>
+
+    <script> <!-- 이 버튼은 빈칸 개수 수정용 -->
+        function change_blank_num(num){
+            <!--alert('버튼 클릭 시부레!!!!!!!!');-->
+            var popUrl="https://www.google.com/search?q=%EC%84%9C%ED%98%84&tbm=isch&ved=2ahUKEwiV8dbdlfvwAhWLwIsBHcsNCUoQ2-cCegQIABAA&oq=%EC%84%9C%ED%98%84&gs_lcp=CgNpbWcQAzIECCMQJzIECCMQJzICCAAyAggAMgIIADICCAAyAggAMgUIABCxAzIFCAAQsQMyBQgAELEDOgQIABADOgcIIxDqAhAnUOIcWPgpYN8qaAJwAHgBgAGPAYgB8ASSAQMwLjWYAQCgAQGqAQtnd3Mtd2l6LWltZ7ABCsABAQ&sclient=img&ei=baO4YNWGH4uBr7wPy5uk0AQ&bih=828&biw=1100#imgrc=6XeboPmTgq4I6M";
+            var popOption="width=1200,height=600,resizable=yes,scrollbars=yes";
+            var p = window.open(popUrl,"popup1",popOption);
+            p.focus();
+        }
+    </script>
+
+    </head>
     <header class="header_admin" id="header">
         <div class="top_header">
             <h1 class="logo"><a href="{% url 'generator:home' %}"><img src="{% static 'images/logo.png' %}" alt="EVM"></a></h1>
@@ -38,8 +51,6 @@
 
     <script>
         function popup_problem(target) {
-            let tmp = "show_UserProblem" + target;
-            document.getElementById(tmp).style.display = "block";
         }
     </script>
     <style>
@@ -49,11 +60,15 @@
     }
     tr th:first-child{
         padding-left: 20px;
-        font-size: 1.5em;
+        font-size: 2em;
     }
     tr td:first-child{
         padding-left: 20px;
-        font-size: 1.5em;
+        font-size: 1.2em;
+    }
+    tr td:nth-child(2){
+        padding-left: 25px;
+        font-size: 1.2em;
     }
 
     </style>
@@ -95,17 +110,18 @@
                 <thead>
                 <tr>
                     <th> <font style="font-size: 20px; font-weight: bold;">문제 정보</font>
-                    <th> <font style="font-size: 20px; font-weight: bold;">빈칸 개수</font></th>
-                    <th> <font style="font-size: 20px; font-weight: bold;">빈칸 개수 수정</font></th>
+                    <th> <font style="font-size: 20px; font-weight: bold;">　빈칸 개수</font></th>
+                    <th> <font style="font-size: 20px; font-weight: bold;">　빈칸 개수 수정</font></th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for candidate in candidates %}
                     <tr>
                         <td> {{ candidate.info }} </td>
-                        <td> {{ candidate.blank_num }} </td>
-                        <td><input type="button" onclick='popup_problem("{{ candidate.problem_id }}")'
-                                                   value="빈칸 개수 수정" class="btn_type4"></td>
+                        <td>　 {{candidate.blank_num}} </td>
+                        <td><input type="button" onclick='change_blank_num("{{ candidate.problem_id }}")'
+                                                   value="빈칸 개수 수정" class="btn_type4"
+                        style="width:120pt"></td>
                     </tr>
                 {% endfor %}
                 <tbody>
