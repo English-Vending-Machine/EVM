@@ -166,8 +166,6 @@ def change_BlankNum(request,word):
     _problem_id = _update_prob.problem_id
 
     _blankNum = request.POST.get('blank_num','')
-    print(_update_prob)
-    print(_blankNum)
     _update_prob.blank_num = int(_blankNum)
 
     _text = _update_prob.text

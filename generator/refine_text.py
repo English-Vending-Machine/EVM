@@ -203,6 +203,9 @@ def type_blank(text, answer):
     answer_list = tmp_list.split('\n')[-5:]
     answer_text = answer_list[answer - 1]
 
+    if answer_text.find('@') != -1:
+        answer_text = answer_text.replace('@',"")
+
     perfect_text = first_text+ ' ' + answer_text+ ' '+ end_text
     perfect_text = perfect_text.split('\n')
     perfect_text = ' '.join(perfect_text)
