@@ -11,6 +11,7 @@ from .PK_From_DB import *
 from .make_blank import Create_Blank
 from .make_image import make_image
 from googletrans import Translator
+from .forms import PhotoForm
 import EVM.settings
 pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 def home(request):
@@ -23,7 +24,9 @@ def home(request):
 def Upload_Photo(request):
     _email = request.session.get('user')
     problem_num = problem.objects.filter(ID=_email).count()
+
     context = {'email': _email, 'PN': problem_num}
+
     return render(request, 'generator/Upload_Photo.html', context)
 
 #업로드 된 문제에 관한 정보들을 갖고, problem DB에 저장. 그리고 scan_from_DB로 OCR 인식.
@@ -42,6 +45,54 @@ def create(request):
 
         _problem = problem(problem_id = _problem_id,ID=_user,type=_problem_type, image=_imgs,
                            blank_num=_blank_num, answer=_answer, info=_info).save()
+        context = scan_img_from_DB(_problem_id)
+        context['email']=_email
+        context['id']=_problem_id
+
+        request.session['problem_id'] = _problem_id
+
+        return render(request, 'generator/OCR.html', context)
+    else:
+        return render(request, 'generator/Upload_Photo.html')
+
+# TODO : 동현이형
+#업로드된 문제를 필요에 따라 이미지 자르기.
+def beforeImageCrop(request):
+    _email = request.session.get('user')
+    problem_num = problem.objects.filter(ID=_email).count()
+    _problem_id = request.session.get('problem_id')
+    _problem = problem.objects.get(problem_id=_problem_id)
+
+    problems = problem.objects.all()
+    if request.method == 'POST':
+        form = PhotoForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('beforeImageCrop')
+    else:
+        form = PhotoForm()
+
+    context = {'email': _email, 'PN': problem_num, 'form': form, 'problem': _problem}
+
+    print(context)
+
+    return render(request, 'generator/ImageCrop.html', context)
+
+#크롭된 이미지에 관한 내용 problem DB에 저장. 그리고 scan_from_DB로 OCR 인식.
+def createCropImage(request):
+    if(request.method == 'POST'):
+        _problem_id = request.session.get('problem_id')
+        _email = request.session.get('user')
+        _user = monitor.objects.get(email=_email)
+
+        _problem = problem.objects.get(problem_id=_problem_id)
+
+        for img in request.FILES.getlist('imgs'):
+            _imgs = img
+
+        _problem.image=_imgs
+        _problem.save()
+
         context = scan_img_from_DB(_problem_id)
         context['email']=_email
         context['id']=_problem_id
