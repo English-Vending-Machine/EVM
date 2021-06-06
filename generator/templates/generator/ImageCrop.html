@@ -113,24 +113,23 @@
                 </div>
             </div>
             <br><br><br>
-            <div class="left-box" style="width: 40%;">
-                <p class="title_style">
+            <img class="left-box" style="width: 40%;">
+                <p class="title_style" style="margin-left: 70px">
                     Image Crop
                 </p>
-                <font size="5em" face="나눔고딕">
-                [ 이미지 자르기 예시 ]</font><br>
-                * 예시처럼, 문제와 보기 이외에 다른 문자가 안 들어가게 잘라주세요! <br><br>
-                <img src="{{ example.image.url}}" alt = "ProblemImage" width="650"
+                <font size="3em" face="나눔고딕" style="margin-left: 70px">
+                * 예시처럼, 문제와 보기 이외에 다른 문자가 안 들어가게 잘라주세요! </font><br>
+                <font size="5em" face="나눔고딕" style="margin-left: 70px">
+                [ 이미지 자르기 예시 ]</font><br><br>
+                <img src="{{ example.image.url}}" alt = "ProblemImage" width="650" style="margin-left: 70px"> <br><br>
 
                 <body>
                 <form method="POST" action="{% url 'generator:createCropImage' %}" enctype="multipart/form-data">
                     {% csrf_token %}
 
-                    <div class="input_bx">
-                        <span class="input_tx">이미지 업로드</span>
-                        <input type="file" name="imgs" class="input_st">
-                    </div>
-                    <input type="submit" value="Upload" class="blue_btn" style="margin-left: 105px">
+                    <td><input type="button" onclick='problem_image_and_korean_translation("{{ candidate.problem_id }}")'
+                                                   value="이미지 자르기" class="blue_btn" style="margin-left: 70px"></td>
+                    <br><br>
                 </form>
                 </body>
             </div>
