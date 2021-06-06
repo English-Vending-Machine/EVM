@@ -1,5 +1,4 @@
 from django.shortcuts import render
-
 from PIL import Image
 import pytesseract
 from generator.models import *

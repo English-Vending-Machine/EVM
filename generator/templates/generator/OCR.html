@@ -6,6 +6,18 @@
 {% endblock %}
 
 {% block content %}
+    <style>
+        .blue_ktn{
+            background-color: #B4B4B4;
+            color: #ffffff;
+            width: 300px;
+            height: 70px;
+            border: none;
+            margin-top:2px;
+            cursor: pointer;
+
+        }
+    </style>
     <!-- header -->
     <header class="header_admin" id="header">
         <div class="top_header">
@@ -88,8 +100,9 @@
                 style="position:relative;">
                 <br><br>
 
-                <button onclick = "location.href='/generator/beforeImageCrop/'">
-                    OCR 인식이 정확하지 않나요? 이미지를 자른 후 다시 이용해 보세요!
+                <button onclick = "location.href='/generator/beforeImageCrop/'" class="blue_ktn" style="    margin-left: 180px;">
+                    OCR 인식이 정확하지 않나요? <br>
+                    여기를 클릭하여 이미지를 잘라주세요!
                 </button>
             </div>
             <div class="right-box title_font"
