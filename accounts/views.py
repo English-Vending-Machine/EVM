@@ -4,9 +4,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import logout as django_logout
 from .forms import SignupForm, LoginForm
 from .models import monitor
-from generator.models import problem
 from django.views.decorators.csrf import csrf_exempt
-from generator.models import class_cnt
+from generator.models import class_cnt, problem
 from django.contrib.auth.decorators import login_required
 
 import json

@@ -139,11 +139,16 @@
                     </div>
                     <div class="input_bx">
                         <span class="input_tx">원하는 빈칸 수</span>
-                        <input type="text" placeholder="1~5 사이의 숫자를 입력하세요." class="input_st" name="blank_num">
+                        <input type="text" placeholder="1~10 사이의 숫자를 입력하세요." class="input_st" name="blank_num">
                     </div>
                     <div class="input_bx">
                         <span class="input_tx">문제 정보</span>
-                        <input type="text" placeholder = "EX) 2021 수능특강 빈칸유형 1번"class="input_st" name="info">
+                        <input type="text" placeholder = "EX) 2021 수능특강 빈칸유형 1번" class="input_st" name="info">
+                    </div>
+                    <div class="input_bx">
+                        <span class="input_tx">키워드 여러 번 등장 시 다중 빈칸 생성 여부</span>
+                        <input type="hidden" name="keyword_duplicate" value="False" />
+                        <label><input type="checkbox" name="keyword_duplicate" value = "True"></label>
                     </div>
                     <input type="submit" value="Upload" class="blue_btn" style="margin-left: 105px">
                 </form>

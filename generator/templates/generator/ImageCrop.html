@@ -117,7 +117,10 @@
                 <p class="title_style">
                     Image Crop
                 </p>
-                <img src="{{ problem.image.url}}" alt = "ProblemImage" width="650"
+                <font size="5em" face="나눔고딕">
+                [ 이미지 자르기 예시 ]</font><br>
+                * 예시처럼, 문제와 보기 이외에 다른 문자가 안 들어가게 잘라주세요! <br><br>
+                <img src="{{ example.image.url}}" alt = "ProblemImage" width="650"
 
                 <body>
                 <form method="POST" action="{% url 'generator:createCropImage' %}" enctype="multipart/form-data">

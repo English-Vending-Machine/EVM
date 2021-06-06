@@ -36,6 +36,11 @@ def create(request):
         _blank_num = int(request.POST['blank_num'])
         _answer = int(request.POST['answer'])
         _info = request.POST['info']
+        _keyword_duplicate = request.POST['keyword_duplicate']
+        if _keyword_duplicate == 'True':
+            _keyword_duplicate = True
+        else:
+            _keyword_duplicate = False
         _email = request.session.get('user')
         _user = monitor.objects.get(email=_email)
 
@@ -43,7 +48,7 @@ def create(request):
             _imgs = img
 
         _problem = problem(problem_id = _problem_id,ID=_user,type=_problem_type, image=_imgs,
-                           blank_num=_blank_num, answer=_answer, info=_info).save()
+                           blank_num=_blank_num, answer=_answer, info=_info, keyword_duplicate=_keyword_duplicate).save()
         context = scan_img_from_DB(_problem_id)
         context['email']=_email
         context['id']=_problem_id
@@ -54,13 +59,13 @@ def create(request):
     else:
         return render(request, 'generator/Upload_Photo.html')
 
-# TODO : 동현이형
 #업로드된 문제를 필요에 따라 이미지 자르기.
 def beforeImageCrop(request):
     _email = request.session.get('user')
     problem_num = problem.objects.filter(ID=_email).count()
     _problem_id = request.session.get('problem_id')
     _problem = problem.objects.get(problem_id=_problem_id)
+    _example = problem.objects.get(problem_id="000000000001")
 
     problems = problem.objects.all()
     if request.method == 'POST':
@@ -71,9 +76,7 @@ def beforeImageCrop(request):
     else:
         form = PhotoForm()
 
-    context = {'email': _email, 'PN': problem_num, 'form': form, 'problem': _problem}
-
-    print(context)
+    context = {'email': _email, 'PN': problem_num, 'form': form, 'problem': _problem, 'example': _example}
 
     return render(request, 'generator/ImageCrop.html', context)
 
@@ -115,7 +118,7 @@ def show_problem(request):
     _info = _update_prob.info
 
     # 빈칸 생성.
-    _problem_text = Create_Blank(_text, _update_prob.blank_num)
+    _problem_text = Create_Blank(_text, _update_prob.blank_num, _update_prob.keyword_duplicate)
 
     _img = make_image(_problem_text, _info)
 
@@ -218,11 +221,18 @@ def change_BlankNum(request,word):
     _blankNum = request.POST.get('blank_num','')
     _update_prob.blank_num = int(_blankNum)
 
+    _keyword_duplicate = request.POST.get('keyword_duplicate', '')
+    if _keyword_duplicate == 'True':
+        _keyword_duplicate = True
+    else:
+        _keyword_duplicate = False
+    _update_prob.keyword_duplicate = _keyword_duplicate
+
     _text = _update_prob.text
     _info = _update_prob.info
 
     # 빈칸 생성.
-    _problem_text = Create_Blank(_text, _blankNum)
+    _problem_text = Create_Blank(_text, _blankNum, _keyword_duplicate)
 
     _img = make_image(_problem_text, _info)
 
