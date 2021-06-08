@@ -18,10 +18,10 @@
     <form method="POST" action="{% url 'generator:ChangeBlankNum' candidates.problem_id %}" enctype="multipart/form-data">
         {% csrf_token %}
         <br><br>
-        <b><font size="4em" face="나눔고딕">기존 문제 사진</font></b>
+        <b><font size="4em" face="나눔고딕">기존 문제 사진</font></b><br>
         <img src="{{ candidates.problem_image.url}}" alt = "ProblemImage" width="575">
         <br><br>
-        <b><font size="4em" face="나눔고딕">기존 빈칸 개수 : </b>
+        <b><font size="4em" face="나눔고딕">기존 빈칸 개수 : </font></b>
         <span>{{ candidates.blank_num }}개</span></font>
         <br><br>
         <b><font size="4em" face="나눔고딕">바꿀 빈칸 개수</font></b>
