@@ -14,6 +14,8 @@ urlpatterns = [
     path('createCropImage', views.createCropImage, name='createCropImage'),
     path('show_UserProblem', views.show_UserProblem, name='show_UserProblem'),
     path('OneProblem/<word>/', views.show_OneProblem),
+    path('solveProblem/<word>/', views.solve_Problem),
+    path('showAnswer', views.show_Answer, name='showAnswer'),
     path('OneBlankNum/<word>/', views.show_OneBlankNum),
     path('ChangeBlankNum/<word>', views.change_BlankNum, name='ChangeBlankNum'),
     path('show_UserBlankNum', views.show_UserBlankNum, name='show_UserBlankNum'),

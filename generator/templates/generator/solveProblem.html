@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <style>
+        .blue_btn{
+            background-color: #B4B4B4;
+            color: #ffffff;
+            width: 200px;
+            height: 50px;
+            border: none;
+            margin-top:2px;
+            cursor: pointer;
+
+        }
+    </style>
+    <form method="POST" action="{% url 'generator:showAnswer' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <meta charset="UTF-8">
+        <title>문제</title> <br><br>
+
+        <font size="4pm" face="나눔고딕">
+        <b>문제 정보 : </b>
+        <span>{{ problem.info }}</span></font>
+        <br><br><br><br>
+        <font size="3pm" face="나눔고딕">
+            <b>문제</b></font>
+        <p>
+            <textarea name="text" style="width: 600px; height: 400px;">
+                            {{problem.blank_text}}
+            </textarea></p>
+        <br><br>
+        <input type="submit" value="Submit" class="blue_btn" style="    margin-left: 180px;">
+    </form>
+</head>
+<body>
+
+</body>
+</html>

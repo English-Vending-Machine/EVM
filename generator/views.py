@@ -188,6 +188,121 @@ def show_OneProblem(request, word):
 
     return render(request, 'generator/OneProblem.html', context)
 
+# 사용자가 생성한 problem 1개 보여주기.
+def solve_Problem(request, word):
+    _email = request.session.get('user')
+    context = {}
+    context['email'] = _email
+
+    request.session['problem_id'] = word
+    candidates = problem.objects.get(problem_id=word)
+    context['problem'] = candidates
+
+    return render(request, 'generator/solveProblem.html', context)
+
+# 사용자가 생성한 problem 1개 보여주기.
+def show_Answer(request):
+    _email = request.session.get('user')
+    context = {}
+    context['email'] = _email
+    _problem_id = request.session.get('problem_id','')
+
+    _problem = problem.objects.get(problem_id=_problem_id)
+    context['candidates'] = _problem
+
+    _answerText = _problem.text
+    _userSolvedText = request.POST.get('text','')
+    _blankText = _problem.blank_text
+    _blankCnt = _blankText.count('__________')
+
+    blank_index = 0
+    answer_index = 0
+    user_index = 0
+    cnt_to_next_blank = 0
+    useranswerlength = 0
+    firstFlag = True
+    answer = ""
+    userAnswer = ""
+    wrongList = []
+    allAnswerRight = True
+    while blank_index < len(_blankText):
+        if _blankText[blank_index] == '_':
+            if _blankText[blank_index + 1] == '_':
+                useranswerlength = 0
+                answer = ""
+                userAnswer = ""
+                if firstFlag:
+                    firstFlag = False
+                    answer_index = blank_index
+                    user_index = blank_index-1
+                else:
+                    answer_index += cnt_to_next_blank
+                    user_index += cnt_to_next_blank
+                    cnt_to_next_blank = 0
+
+                while _answerText[answer_index] != ' ':
+                    answer += _answerText[answer_index]
+                    if answer_index < len(_answerText) - 1:
+                        answer_index += 1
+                    else:
+                        break
+
+                while _userSolvedText[user_index] != ' ':
+                    userAnswer += _userSolvedText[user_index]
+                    useranswerlength += 1
+                    if user_index < len(_userSolvedText) - 1:
+                        user_index += 1
+                    else:
+                        break
+
+                if answer != userAnswer:
+                    wrongList.append(user_index)
+                    wrongList.append(useranswerlength)
+                    allAnswerRight = False
+
+                while _blankText[blank_index] != ' ':
+                    if blank_index < len(_blankText) - 1:
+                        blank_index += 1
+                    else:
+                        break
+        else:
+            if firstFlag == False:
+                cnt_to_next_blank += 1
+            blank_index += 1
+
+    listIndex = 0
+    dictText = []
+    parseFirst = True
+    lastIndex = 0
+    while listIndex < len(wrongList):
+        index = wrongList[listIndex]
+        wronglength = wrongList[listIndex + 1]
+        index -= wronglength
+        if parseFirst:
+            dict = {}
+            dict['black'] = _userSolvedText[:index - 1]
+            dict['red'] = _userSolvedText[index:index + wronglength]
+            dictText.append(dict)
+            parseFirst = False
+        else:
+            dict = {}
+            dict['black'] = _userSolvedText[lastIndex:index - 1]
+            dict['red'] = _userSolvedText[index:index + wronglength]
+            dictText.append(dict)
+
+        lastIndex = index + wronglength + 1
+        listIndex += 2
+
+    if lastIndex < len(_userSolvedText):
+        dict = {}
+        dict['black'] = _userSolvedText[lastIndex:]
+        dictText.append(dict)
+
+    context['dictText'] = dictText
+    context['allAnswerRight'] = allAnswerRight
+
+    return render(request, 'generator/AnswerResult.html', context)
+
 # 사용자가 바꾸려는 problem 1개 보여주기.
 def show_OneBlankNum(request, word):
     _email = request.session.get('user')

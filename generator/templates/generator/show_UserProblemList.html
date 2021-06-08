@@ -17,6 +17,14 @@
             var p = window.open(popUrl,"popup1",popOption);
             p.focus();
         }
+        function solve_problem(num){
+            var popUrl="http://127.0.0.1:8000/generator/solveProblem/";
+            popUrl += num;
+            popUrl += "/"
+            var popOption="width=600,height=800,resizable=yes,scrollbars=yes";
+            var p = window.open(popUrl,"popup1",popOption);
+            p.focus();
+        }
     </script>
     </head>
     <header class="header_admin" id="header">
@@ -103,6 +111,7 @@
                 <tr>
                     <th> <font style="font-size: 20px; font-weight: bold;">문제 정보</font></th>
                     <th> <font style="font-size: 20px; font-weight: bold;">문제 사진 및 한국어 번역 확인</font></th>
+                    <th> <font style="font-size: 20px; font-weight: bold;">문제 풀기</font></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -111,6 +120,8 @@
                         <td> {{ candidate.info }} </td>
                         <td><input type="button" onclick='problem_image_and_korean_translation("{{ candidate.problem_id }}")'
                                                    value="문제 보기" class="btn_type4"></td>
+                        <td><input type="button" onclick='solve_problem("{{ candidate.problem_id }}")'
+                                                   value="문제 풀기" class="btn_type4"></td>
                     </tr>
                 {% endfor %}
                 <tbody>
