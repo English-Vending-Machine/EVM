@@ -1,6 +1,7 @@
 from django.conf.urls import include, url
 from generator import views
 from django.urls import path
+from django.views.decorators.csrf import csrf_exempt
 
 app_name = 'generator'
 
@@ -11,7 +12,9 @@ urlpatterns = [
     path('create', views.create, name='create'),
     path('beforeImageCrop/', views.beforeImageCrop),
     path('show_problem', views.show_problem, name='show_problem'),
-    path('createCropImage', views.createCropImage, name='createCropImage'),
+    path('createCropImage/', csrf_exempt(views.createCropImage)),
+    path('ImageCrop/<word>/', views.ImageCrop),
+    path('CropToOCR/', views.crop_to_OCR),
     path('show_UserProblem', views.show_UserProblem, name='show_UserProblem'),
     path('OneProblem/<word>/', views.show_OneProblem),
     path('solveProblem/<word>/', views.solve_Problem),

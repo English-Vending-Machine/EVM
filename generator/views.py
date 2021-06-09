@@ -1,16 +1,16 @@
+from django.http import JsonResponse
 from django.shortcuts import render
 from PIL import Image
 import pytesseract
 from generator.models import *
 from generator.refine_text import *
 from django.shortcuts import render, get_object_or_404, redirect
-
 from accounts.models import monitor
 from .PK_From_DB import *
 from .make_blank import Create_Blank
-from .make_image import make_image
+from .make_image import *
 from googletrans import Translator
-from .forms import PhotoForm
+from .forms import ImageForm
 import EVM.settings
 pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 def home(request):
@@ -67,43 +67,55 @@ def beforeImageCrop(request):
     _problem = problem.objects.get(problem_id=_problem_id)
     _example = problem.objects.get(problem_id="000000000001")
 
-    problems = problem.objects.all()
-    if request.method == 'POST':
-        form = PhotoForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('beforeImageCrop')
-    else:
-        form = PhotoForm()
-
-    context = {'email': _email, 'PN': problem_num, 'form': form, 'problem': _problem, 'example': _example}
+    context = {'email': _email, 'PN': problem_num, 'problem': _problem, 'example': _example}
 
     return render(request, 'generator/ImageCrop.html', context)
+
+def ImageCrop(request, word):
+    _email = request.session.get('user')
+    _problem = problem.objects.get(problem_id=word)
+
+    context = {'email': _email, 'problem': _problem}
+
+    return render(request, 'generator/OneImageCrop.html', context)
 
 #크롭된 이미지에 관한 내용 problem DB에 저장. 그리고 scan_from_DB로 OCR 인식.
 def createCropImage(request):
     if(request.method == 'POST'):
-        _problem_id = request.session.get('problem_id')
         _email = request.session.get('user')
-        _user = monitor.objects.get(email=_email)
-
+        _problem_id = request.session.get('problem_id')
         _problem = problem.objects.get(problem_id=_problem_id)
 
-        for img in request.FILES.getlist('imgs'):
-            _imgs = img
+        x = float(request.POST.get('x',''))
+        y = float(request.POST.get('y', ''))
+        width = float(request.POST.get('width', ''))
+        height = float(request.POST.get('height', ''))
 
-        _problem.image=_imgs
+        croppedImage = crop_image(x, y, width, height, _problem)
+
+        _img_name = "\\problems\\" + _problem_id + "_crop.png"
+        _img_path = EVM.settings.MEDIA_ROOT + _img_name
+
+        croppedImage.save(_img_path)
+
+        _problem.image = _img_path
         _problem.save()
 
         context = scan_img_from_DB(_problem_id)
         context['email']=_email
         context['id']=_problem_id
-
-        request.session['problem_id'] = _problem_id
-
         return render(request, 'generator/OCR.html', context)
     else:
         return render(request, 'generator/Upload_Photo.html')
+
+def crop_to_OCR(request):
+    _email = request.session.get('user')
+    _problem_id = request.session.get('problem_id')
+    _problem = problem.objects.get(problem_id=_problem_id)
+    context = scan_img_from_DB(_problem_id)
+    context['email'] = _email
+    context['id'] = _problem_id
+    return render(request, 'generator/OCR.html', context)
 
 def show_problem(request):
     _email = request.session.get('user')

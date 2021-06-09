@@ -53,13 +53,11 @@ body,button,input,select,textarea,table {
 /* 체크박스 스타일 공통 */
 .chk_box input[type="checkbox"] + label {position: relative; padding-left: 30px; font-size: 14px;}
 .chk_box input[type="checkbox"] + label:before {content: ''; position: absolute; left: 0; top: 1px; width: 17px; height: 17px; border: 1px solid rgb(221,221,221); border-radius: 100%; transition: all .1s;}
-.chk_box input[type="checkbox"] + label:after {content: ''; position: absolute; left: 4px; top: 6px; width: 11px; height: 9px; background: url(../images/ic_chk.png) no-repeat 50% 50%; background-size: 100%; opacity: 0; transition: all .1s;}
 .chk_box input[type="checkbox"]:checked + label:before {background: rgb(32,161,124); border-color: rgb(32,161,124);}
 .chk_box input[type="checkbox"]:checked + label:after {opacity: 1;}
 
 /* 셀렉 스타일 공통 */
 .select_type1 {border: 1px solid #ddd; position: relative; background: #fff; height: 50px;}
-.select_type1:after {content: ''; position: absolute; right: 20px; top: 50%; width: 9px; height: 6px; background: url(../images/ic_arr.png) no-repeat 50% 50%; background-size: 100%; transform: translateY(-50%);}
 .select_type1 select {padding: 0 20px; font-size: 18px; color: #333; background: none; z-index: 1; position: relative; height: 100%;}
 
 /* 인풋 파일 스타일 */
@@ -79,7 +77,6 @@ body,button,input,select,textarea,table {
 .btn_type4.off:hover {border-color: #ddd; color: #666;}
 .btn_type5 {width: 110px; display: inline-block; vertical-align: top; background: #eee; border: 1px solid #ddd; box-sizing: border-box; border-radius: 5px; color: #666; font-size: 16px; font-weight: 400; text-align: center; line-height: 25px; padding: 5px 20px; border-radius: 35px; transition: all .3s;}
 .btn_plus {display: inline-block; vertical-align: top; line-height: 30px; padding: 10px 30px; font-size: 18px; font-weight: 500; color: #fff; background: #ff3300; border-radius: 5px;}
-.btn_plus:after {content: ''; width: 17px; height: 17px; background: url(../images/ic_plus.png) no-repeat 50% 50%; background-size: 100%; display: inline-block; vertical-align: middle; margin-left: 25px;}
 
 
 

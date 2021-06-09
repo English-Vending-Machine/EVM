@@ -6,6 +6,16 @@
 {% endblock %}
 
 {% block content %}
+    <script> <!-- 이 버튼은 빈칸 개수 수정용 -->
+        function ImageCrop(num){
+            var popUrl="http://127.0.0.1:8000/generator/ImageCrop/";
+            popUrl += num;
+            popUrl += "/"
+            var popOption="width=600,height=400,resizable=yes,scrollbars=yes";
+            var p = window.open(popUrl,"popup1",popOption);
+            p.focus();
+        }
+    </script>
     <!-- header -->
     <header class="header_admin" id="header">
         <div class="top_header">
@@ -156,87 +166,11 @@
                 [ 이미지 자르기 예시 ]</font><br><br>
                 <img src="{{ example.image.url}}" alt = "ProblemImage" width="400" style="margin-left: 70px"> <br><br>
                 <body>
-                <form method="POST" action="{% url 'generator:createCropImage' %}" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <td><input type="button" onclick="opencrop();"
+                <td><input type="button" onclick='ImageCrop("{{ problem.problem_id }}")'
                                                    value="이미지 자르기" class="blue_btn" style="margin-left: 70px"></td>
-                    <br><br>
-                </form>
-
-                 <!-- MODAL TO CROP THE IMAGE -->
-                  <div class="modal fade" id="modalCrop">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <button type="button" onclick="closecrop();" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">✖</span>
-                          </button>
-                          <h4 class="modal-title">Crop the photo</h4>
-                        </div>
-                        <div class="modal-body">
-                            <p>
-        <!-- Below are a series of inputs which allow file selection and interaction with the cropper api -->
-                                <input type="file" id="fileInput" accept="image/*" />
-                            </p></br>
-                            <div>
-                                <canvas id="canvas">
-                                    Your browser does not support the HTML5 canvas element.
-                                </canvas>
-                            </div></br>
-                                <input type="button" id="btnCrop" value="Crop" />
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <input type="button" id="btnRestore" value="Restore" /></br>
-                            <div id="result"></div>
-                        </div>
-
-                      </div>
-                    </div>
-                  </div>
-
-                <!-- Image crop js Function -->
-                <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
-                <script src='https://cdnjs.cloudflare.com/ajax/libs/cropper/2.3.3/cropper.js'></script>
-                <script id="rendered-js" >
-                    var canvas = $("#canvas"),
-                    context = canvas.get(0).getContext("2d"),
-                    $result = $('#result');
-
-                    $('#fileInput').on('change', function () {
-                      if (this.files && this.files[0]) {
-                        if (this.files[0].type.match(/^image\//)) {
-                          var reader = new FileReader();
-                          reader.onload = function (evt) {
-                            var img = new Image();
-                            img.onload = function () {
-                              context.canvas.height = img.height;
-                              context.canvas.width = img.width;
-                              context.drawImage(img, 0, 0);
-                              var cropper = canvas.cropper();
-
-                              $('#btnCrop').click(function () {
-                                // Get a string base 64 data url
-                                var croppedImageDataURL = canvas.cropper('getCroppedCanvas').toDataURL("image/png");
-                                $result.append($('<img>').attr('src', croppedImageDataURL));
-                              });
-                              $('#btnRestore').click(function () {
-                                canvas.cropper('reset');
-                                $result.empty();
-                              });
-                            };
-                            img.src = evt.target.result;
-                          };
-                          reader.readAsDataURL(this.files[0]);
-                        } else
-                        {
-                          alert("Invalid file type! Please select an image file.");
-                        }
-                      } else
-                      {
-                        alert('No file(s) selected.');
-                      }
-                    });
-                    //# sourceURL=pen.js
-                </script>
+                <button onclick = "location.href='/generator/CropToOCR/'" class="blue_btn" style="    margin-left: 70px;">
+                    다음
+                </button>
                 </body>
             </div>
         </section>
