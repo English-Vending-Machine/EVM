@@ -9,7 +9,7 @@ const csrf = document.getElementsByName('csrfmiddlewaretoken')
 var $image = $('#image')
 
 $image.cropper({
-  aspectRatio: 16 / 9,
+  aspectRatio: 20 / 9,
   crop: function(event) {
     console.log("x :", event.detail.x);
     console.log("y :", event.detail.y);

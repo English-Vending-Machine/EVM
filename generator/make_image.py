@@ -2,6 +2,7 @@ import os
 from PIL import Image, ImageDraw, ImageFont
 import textwrap
 import EVM.settings
+from six import BytesIO
 
 # 이후 사용 편의를 위하여 함수 형태로 만들었습니다.
 from django.core.files.uploadedfile import InMemoryUploadedFile
@@ -44,7 +45,7 @@ def make_image(message, problem_info):
 def crop_image(x,y,width,height, problem_info):
 
     image = Image.open(problem_info.image)
-    area = (x, y, width, height)
+    area = (x, y, width+90, height+90)
 
     croppedImage = image.crop(area)
 

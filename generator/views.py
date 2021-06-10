@@ -1,7 +1,8 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 from PIL import Image
 import pytesseract
+
 from generator.models import *
 from generator.refine_text import *
 from django.shortcuts import render, get_object_or_404, redirect
@@ -91,6 +92,8 @@ def createCropImage(request):
         width = float(request.POST.get('width', ''))
         height = float(request.POST.get('height', ''))
 
+        print(x, y, width, height)
+
         croppedImage = crop_image(x, y, width, height, _problem)
 
         _img_name = "\\problems\\" + _problem_id + "_crop.png"
@@ -101,10 +104,10 @@ def createCropImage(request):
         _problem.image = _img_path
         _problem.save()
 
-        context = scan_img_from_DB(_problem_id)
-        context['email']=_email
-        context['id']=_problem_id
-        return render(request, 'generator/OCR.html', context)
+        #context = scan_img_from_DB(_problem_id)
+        #context['email']=_email
+        #context['id']=_problem_id
+        return HttpResponse("Succesfully saved to DB!")
     else:
         return render(request, 'generator/Upload_Photo.html')
 
