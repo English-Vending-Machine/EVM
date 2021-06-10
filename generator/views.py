@@ -246,7 +246,7 @@ def show_Answer(request):
                 if firstFlag:
                     firstFlag = False
                     answer_index = blank_index
-                    user_index = blank_index-1
+                    user_index = blank_index
                 else:
                     answer_index += cnt_to_next_blank
                     user_index += cnt_to_next_blank
