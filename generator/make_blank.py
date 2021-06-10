@@ -19,4 +19,6 @@ def Create_Blank(text, blankNum, keyword_duplicate):
         for i in keywords:
             text = text.replace(i, "__________", 1)
 
+    text = text.replace('_s','_')
+
     return text
