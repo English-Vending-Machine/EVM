@@ -1,0 +1,31 @@
+{% extends  "generator/base.html" %}
+
+{% block content %}
+    <style>
+        .blue_btn{
+            background-color: #B4B4B4;
+            color: #ffffff;
+            width: 200px;
+            height: 50px;
+            border: none;
+            margin-top:2px;
+            cursor: pointer;
+
+        }
+    </style>
+
+    <div id="alert-box"></div>
+    <div id = "image-box" class=""mb-3></div>
+    <form action="" id="image-form">
+        {% csrf_token %}
+        <img src = "{{ problem.image.url }}" id="image" >
+    </form>
+    <br>
+    <button class="blue_btn" style="margin-left: 120px" id="confirm-btn">confirm</button>
+    <br>
+    <font size="4pm" face="나눔고딕">
+            <b>※ 버튼 주위가 검게 변하면 자르기가 완료된 것입니다. <br>
+            창을 닫고 다음 버튼을 눌러 주세요. </b></font>
+            <br>
+{% endblock content %}
+

@@ -209,6 +209,8 @@ def type_blank(text, answer):
     perfect_text = first_text+ ' ' + answer_text+ ' '+ end_text
     perfect_text = perfect_text.split('\n')
     perfect_text = ' '.join(perfect_text)
+    perfect_text = perfect_text.replace('©', '')
+    perfect_text = perfect_text.replace('@', '')
 
     return perfect_text
 
