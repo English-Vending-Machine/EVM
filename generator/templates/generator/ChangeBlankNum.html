@@ -33,7 +33,7 @@
                 <li>
                     <a href="{% url 'generator:Upload_Photo' %}">문제 생성</a>
                     <br><br>
-                    <a href="{% url 'generator:show_UserProblem' %}">생성한 문제 보기</a>
+                    <a href="{% url 'generator:show_UserProblem' %}">생성한 문제 확인 및 풀기</a>
                     <br><br>
                     <a href="{% url 'generator:show_UserBlankNum' %}">빈칸 개수 수정</a>
                      <br><br>
@@ -117,7 +117,7 @@
                 <tr>
                     <th> <font style="font-size: 20px; font-weight: bold;">문제 정보</font>
                     <th> <font style="font-size: 20px; font-weight: bold;">　빈칸 개수</font></th>
-                    <th> <font style="font-size: 20px; font-weight: bold;">　빈칸 개수 수정</font></th>
+                    <th> <font style="font-size: 20px; font-weight: bold;">　빈칸 개수 및 키워드 중복 여부 수정</font></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -126,7 +126,7 @@
                         <td> {{ candidate.info }} </td>
                         <td>　 {{candidate.blank_num}} </td>
                         <td><input type="button" onclick='change_blank_num("{{ candidate.problem_id }}")'
-                                                   value="빈칸 개수 수정" class="btn_type4"
+                                                   value="수정" class="btn_type4"
                         style="width:120pt"></td>
                     </tr>
                 {% endfor %}

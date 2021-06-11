@@ -13,6 +13,7 @@ class problem(models.Model):
     blank_text = models.TextField(blank=True, null=True)
     translation_text = models.TextField(blank=True, null=True)
     problem_image = models.ImageField(upload_to='results/', null=True, blank=True)
+    keyword_duplicate = models.BooleanField(default=True)
 
 class class_cnt(models.Model):
     class_cnt_id = models.IntegerField(primary_key=True, default=1)

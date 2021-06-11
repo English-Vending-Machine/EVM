@@ -1,16 +1,17 @@
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
-
 from PIL import Image
 import pytesseract
+
 from generator.models import *
 from generator.refine_text import *
 from django.shortcuts import render, get_object_or_404, redirect
-
 from accounts.models import monitor
 from .PK_From_DB import *
 from .make_blank import Create_Blank
-from .make_image import make_image
+from .make_image import *
 from googletrans import Translator
+from .forms import ImageForm
 import EVM.settings
 pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 def home(request):
@@ -23,7 +24,9 @@ def home(request):
 def Upload_Photo(request):
     _email = request.session.get('user')
     problem_num = problem.objects.filter(ID=_email).count()
+
     context = {'email': _email, 'PN': problem_num}
+
     return render(request, 'generator/Upload_Photo.html', context)
 
 #업로드 된 문제에 관한 정보들을 갖고, problem DB에 저장. 그리고 scan_from_DB로 OCR 인식.
@@ -34,6 +37,11 @@ def create(request):
         _blank_num = int(request.POST['blank_num'])
         _answer = int(request.POST['answer'])
         _info = request.POST['info']
+        _keyword_duplicate = request.POST['keyword_duplicate']
+        if _keyword_duplicate == 'True':
+            _keyword_duplicate = True
+        else:
+            _keyword_duplicate = False
         _email = request.session.get('user')
         _user = monitor.objects.get(email=_email)
 
@@ -41,7 +49,7 @@ def create(request):
             _imgs = img
 
         _problem = problem(problem_id = _problem_id,ID=_user,type=_problem_type, image=_imgs,
-                           blank_num=_blank_num, answer=_answer, info=_info).save()
+                           blank_num=_blank_num, answer=_answer, info=_info, keyword_duplicate=_keyword_duplicate).save()
         context = scan_img_from_DB(_problem_id)
         context['email']=_email
         context['id']=_problem_id
@@ -51,6 +59,66 @@ def create(request):
         return render(request, 'generator/OCR.html', context)
     else:
         return render(request, 'generator/Upload_Photo.html')
+
+#업로드된 문제를 필요에 따라 이미지 자르기.
+def beforeImageCrop(request):
+    _email = request.session.get('user')
+    problem_num = problem.objects.filter(ID=_email).count()
+    _problem_id = request.session.get('problem_id')
+    _problem = problem.objects.get(problem_id=_problem_id)
+    _example = problem.objects.get(problem_id="000000000001")
+
+    context = {'email': _email, 'PN': problem_num, 'problem': _problem, 'example': _example}
+
+    return render(request, 'generator/ImageCrop.html', context)
+
+def ImageCrop(request, word):
+    _email = request.session.get('user')
+    _problem = problem.objects.get(problem_id=word)
+
+    context = {'email': _email, 'problem': _problem}
+
+    return render(request, 'generator/OneImageCrop.html', context)
+
+#크롭된 이미지에 관한 내용 problem DB에 저장. 그리고 scan_from_DB로 OCR 인식.
+def createCropImage(request):
+    if(request.method == 'POST'):
+        _email = request.session.get('user')
+        _problem_id = request.session.get('problem_id')
+        _problem = problem.objects.get(problem_id=_problem_id)
+
+        x = float(request.POST.get('x',''))
+        y = float(request.POST.get('y', ''))
+        width = float(request.POST.get('width', ''))
+        height = float(request.POST.get('height', ''))
+
+        print(x, y, width, height)
+
+        croppedImage = crop_image(x, y, width, height, _problem)
+
+        _img_name = "\\problems\\" + _problem_id + "_crop.png"
+        _img_path = EVM.settings.MEDIA_ROOT + _img_name
+
+        croppedImage.save(_img_path)
+
+        _problem.image = _img_path
+        _problem.save()
+
+        #context = scan_img_from_DB(_problem_id)
+        #context['email']=_email
+        #context['id']=_problem_id
+        return HttpResponse("Succesfully saved to DB!")
+    else:
+        return render(request, 'generator/Upload_Photo.html')
+
+def crop_to_OCR(request):
+    _email = request.session.get('user')
+    _problem_id = request.session.get('problem_id')
+    _problem = problem.objects.get(problem_id=_problem_id)
+    context = scan_img_from_DB(_problem_id)
+    context['email'] = _email
+    context['id'] = _problem_id
+    return render(request, 'generator/OCR.html', context)
 
 def show_problem(request):
     _email = request.session.get('user')
@@ -65,7 +133,7 @@ def show_problem(request):
     _info = _update_prob.info
 
     # 빈칸 생성.
-    _problem_text = Create_Blank(_text, _update_prob.blank_num)
+    _problem_text = Create_Blank(_text, _update_prob.blank_num, _update_prob.keyword_duplicate)
 
     _img = make_image(_problem_text, _info)
 
@@ -135,6 +203,121 @@ def show_OneProblem(request, word):
 
     return render(request, 'generator/OneProblem.html', context)
 
+# 사용자가 생성한 problem 1개 보여주기.
+def solve_Problem(request, word):
+    _email = request.session.get('user')
+    context = {}
+    context['email'] = _email
+
+    request.session['problem_id'] = word
+    candidates = problem.objects.get(problem_id=word)
+    context['problem'] = candidates
+
+    return render(request, 'generator/solveProblem.html', context)
+
+# 사용자가 생성한 problem 1개 보여주기.
+def show_Answer(request):
+    _email = request.session.get('user')
+    context = {}
+    context['email'] = _email
+    _problem_id = request.session.get('problem_id','')
+
+    _problem = problem.objects.get(problem_id=_problem_id)
+    context['candidates'] = _problem
+
+    _answerText = _problem.text
+    _userSolvedText = request.POST.get('text','')
+    _blankText = _problem.blank_text
+    _blankCnt = _blankText.count('__________')
+
+    blank_index = 0
+    answer_index = 0
+    user_index = 0
+    cnt_to_next_blank = 0
+    useranswerlength = 0
+    firstFlag = True
+    answer = ""
+    userAnswer = ""
+    wrongList = []
+    allAnswerRight = True
+    while blank_index < len(_blankText):
+        if _blankText[blank_index] == '_':
+            if _blankText[blank_index + 1] == '_':
+                useranswerlength = 0
+                answer = ""
+                userAnswer = ""
+                if firstFlag:
+                    firstFlag = False
+                    answer_index = blank_index
+                    user_index = blank_index
+                else:
+                    answer_index += cnt_to_next_blank
+                    user_index += cnt_to_next_blank
+                    cnt_to_next_blank = 0
+
+                while _answerText[answer_index] != ' ':
+                    answer += _answerText[answer_index]
+                    if answer_index < len(_answerText) - 1:
+                        answer_index += 1
+                    else:
+                        break
+
+                while _userSolvedText[user_index] != ' ':
+                    userAnswer += _userSolvedText[user_index]
+                    useranswerlength += 1
+                    if user_index < len(_userSolvedText) - 1:
+                        user_index += 1
+                    else:
+                        break
+
+                if answer != userAnswer:
+                    wrongList.append(user_index)
+                    wrongList.append(useranswerlength)
+                    allAnswerRight = False
+
+                while _blankText[blank_index] != ' ':
+                    if blank_index < len(_blankText) - 1:
+                        blank_index += 1
+                    else:
+                        break
+        else:
+            if firstFlag == False:
+                cnt_to_next_blank += 1
+            blank_index += 1
+
+    listIndex = 0
+    dictText = []
+    parseFirst = True
+    lastIndex = 0
+    while listIndex < len(wrongList):
+        index = wrongList[listIndex]
+        wronglength = wrongList[listIndex + 1]
+        index -= wronglength
+        if parseFirst:
+            dict = {}
+            dict['black'] = _userSolvedText[:index - 1]
+            dict['red'] = _userSolvedText[index:index + wronglength]
+            dictText.append(dict)
+            parseFirst = False
+        else:
+            dict = {}
+            dict['black'] = _userSolvedText[lastIndex:index - 1]
+            dict['red'] = _userSolvedText[index:index + wronglength]
+            dictText.append(dict)
+
+        lastIndex = index + wronglength + 1
+        listIndex += 2
+
+    if lastIndex < len(_userSolvedText):
+        dict = {}
+        dict['black'] = _userSolvedText[lastIndex:]
+        dictText.append(dict)
+
+    context['dictText'] = dictText
+    context['allAnswerRight'] = allAnswerRight
+
+    return render(request, 'generator/AnswerResult.html', context)
+
 # 사용자가 바꾸려는 problem 1개 보여주기.
 def show_OneBlankNum(request, word):
     _email = request.session.get('user')
@@ -168,11 +351,18 @@ def change_BlankNum(request,word):
     _blankNum = request.POST.get('blank_num','')
     _update_prob.blank_num = int(_blankNum)
 
+    _keyword_duplicate = request.POST.get('keyword_duplicate', '')
+    if _keyword_duplicate == 'True':
+        _keyword_duplicate = True
+    else:
+        _keyword_duplicate = False
+    _update_prob.keyword_duplicate = _keyword_duplicate
+
     _text = _update_prob.text
     _info = _update_prob.info
 
     # 빈칸 생성.
-    _problem_text = Create_Blank(_text, _blankNum)
+    _problem_text = Create_Blank(_text, _blankNum, _keyword_duplicate)
 
     _img = make_image(_problem_text, _info)
 

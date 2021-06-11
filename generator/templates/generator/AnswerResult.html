@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <style>
+        .blue_btn{
+            background-color: #B4B4B4;
+            color: #ffffff;
+            width: 200px;
+            height: 50px;
+            border: none;
+            margin-top:2px;
+            cursor: pointer;
+
+        }
+    </style>
+        <meta charset="UTF-8">
+        <title>문제</title> <br><br>
+        <font size="4pm" face="나눔고딕">
+        <b>문제 정보 : </b>
+        <span>{{ candidates.info }}</span></font>
+        <br><br>
+        {% for i in dictText %}
+                    <tr>
+                        <font color="black">
+                            <td> {{ i.black }} </td></font>
+                        <font color="red">
+                            <td> {{ i.red   }} </td></font>
+                    </tr>
+        {% endfor %}
+        <br><br><br>
+
+        {% if allAnswerRight == True %}
+            <font size="8pm" face="나눔고딕">
+            <b>모든 정답을 맞추셨습니다!</b></font>
+            <br><br>
+        {% else %}
+            <font size="4pm" face="나눔고딕">
+            <b>정답</b></font>
+            <br><br>
+            {{ candidates.text }}
+            <br><br>
+            <font size="4pm" face="나눔고딕">
+            <b>해설</b></font>
+            <br><br>
+            {{ candidates.translation_text }}
+        {% endif %}
+</head>
+<body>
+
+</body>
+</html>

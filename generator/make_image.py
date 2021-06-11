@@ -2,10 +2,10 @@ import os
 from PIL import Image, ImageDraw, ImageFont
 import textwrap
 import EVM.settings
+from six import BytesIO
 
 # 이후 사용 편의를 위하여 함수 형태로 만들었습니다.
 from django.core.files.uploadedfile import InMemoryUploadedFile
-
 
 def make_image(message, problem_info):
     # Image size
@@ -41,4 +41,13 @@ def make_image(message, problem_info):
         # height는 글씨의 높이로, 한 줄 적고 나서 height만큼 아래에 다음 줄을 적음
 
     return image
+
+def crop_image(x,y,width,height, problem_info):
+
+    image = Image.open(problem_info.image)
+    area = (x, y, width+90, height+90)
+
+    croppedImage = image.crop(area)
+
+    return croppedImage
 

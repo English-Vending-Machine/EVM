@@ -1,18 +1,24 @@
-#from gensim.summarization.summarizer import summarize
-#summarized_pages=[]
-"""
-for page in range(0, number_of_pages) :
-    try :
-        summarized_pages.append(summarize(pages[page]))
-    except ValueError:
-        summarized_pages.append(pages[page])
-len(summarized_pages)
-for page in range(0, number_of_pages) :
-    summarized_pages[page] = summarized_pages[page].replace("\\n","")
-    print(str(page)+":"+summarized_pages[page])
-"""
+from yake import KeywordExtractor
 
-def Create_Blank(text, blankNum):
-    # 빈칸 생성
+def Create_Blank(text, blankNum, keyword_duplicate):
+    wantedNumber = int(blankNum)
+    print(type(keyword_duplicate))
+    print(keyword_duplicate)
+
+    if keyword_duplicate:
+        kw_extractor = KeywordExtractor(lan="en", n=1, top=wantedNumber)
+        keywords = kw_extractor.extract_keywords(text=text)
+        keywords = [x for x, y in keywords]
+        for i in keywords:
+            text = text.replace(i, "__________")
+    else:
+        kw_extractor = KeywordExtractor(lan="en", n=1, top=wantedNumber)
+        keywords = kw_extractor.extract_keywords(text=text)
+        keywords = [x for x, y in keywords]
+        print(keywords)
+        for i in keywords:
+            text = text.replace(i, "__________", 1)
+
+    text = text.replace('_s','_')
 
     return text
