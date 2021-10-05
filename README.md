@@ -7,7 +7,7 @@
 2.  Download requirements.txt <br>
 3.  If there is an error like psycopg2 , check PostgreSQL PATH 
 4.  By using python manage.py createsuperuser, local db --> create ID and PW 
-5.  Go to /admin page, db Administratㅑㅐㅜ<br>
+5.  Go to /admin page, db Administration<br>
 
 ## Reference material
 
